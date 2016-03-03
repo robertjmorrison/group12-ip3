@@ -1,7 +1,9 @@
 ﻿@{
-    
     var userNameLogIn = "";
     var passwordLogIn = "";
+
+
+
     var loginErrorMessage = "";
 
 if(IsPost)
@@ -15,7 +17,7 @@ if(IsPost)
              if (WebSecurity.UserExists(userNameLogIn))
                 {
                     WebSecurity.Login(userNameLogIn, passwordLogIn, true);
-                    Response.Redirect("Index.cshtml");
+                    Response.Redirect("Test.cshtml");
                 }
              else
                 {
@@ -31,6 +33,7 @@ if(IsPost)
 }
 }
 
+<!DOCTYPE html>
 
 <div class='row'>
     <!-- Nav bar-->
