@@ -1,0 +1,82 @@
+﻿@{
+    
+    var userNameLogIn = "";
+    var passwordLogIn = "";
+    var loginErrorMessage = "";
+
+if(IsPost)
+{
+       if (Request["submit"] == "log in")
+
+        {
+            userNameLogIn = Request.Form["username"];
+            passwordLogIn = Request.Form["password"];
+
+             if (WebSecurity.UserExists(userNameLogIn))
+                {
+                    WebSecurity.Login(userNameLogIn, passwordLogIn, true);
+                    Response.Redirect("Index.cshtml");
+                }
+             else
+                {
+                    loginErrorMessage = "Login failed";
+                }
+        }
+        else if (Request["submit"] == "log out")
+        {
+            WebSecurity.Logout();
+            Response.Redirect("Index.cshtml");
+        }
+
+}
+}
+
+<!--Git Test-->
+
+<!DOCTYPE html>
+
+<div class='row'>
+    <!-- Nav bar-->
+    <!--div id = 'navbar-parent' class='col-sm-1'>
+        <div id='navbar'>
+           <p>Hello</p>
+        </div>
+    </div-->
+
+     <div id='login' class='col-sm-12'>
+
+         @if(WebSecurity.IsAuthenticated)
+ {
+     @:<form name="login" action="" method="post" accept-charset="utf-8">
+         <input type="submit" name="submit" value="log out" />
+    @:</form>
+
+ }
+ else 
+ {  
+                 <h1>Login</h1>
+            @:<form name="login" action="" method="post" accept-charset="utf-8">
+            @:<input type="text" name="username" placeholder="username"></br>
+            @:<input type="password" name="password" placeholder="password"></br>
+            <span>
+                <input type="checkbox" name="checkbox">
+                <label for="checkbox">remember</label>
+            </span>
+            <input type="submit" name="submit" value="log in">
+
+            @:</form>
+    }
+    <a href='Test.cshtml'>Admin</a>
+    <a href='Test.cshtml'>User</a>
+    <a href='Test.cshtml'>Manager</a>
+         <p>@loginErrorMessage</p>
+
+        </div>
+
+    <!--div class='col-sm-1'>
+    <p></p>
+    </div-->
+</div>
+
+
+
