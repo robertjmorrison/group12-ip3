@@ -2,7 +2,7 @@
     var userNameLogIn = "";
     var passwordLogIn = "";
 
-    var loginErrorMessage = "Ye can't log in";
+    var loginErrorMessage = "";
 
 if(IsPost)
 {
@@ -15,7 +15,7 @@ if(IsPost)
              if (WebSecurity.UserExists(userNameLogIn))
                 {
                     WebSecurity.Login(userNameLogIn, passwordLogIn, true);
-                    Response.Redirect("Index.cshtml");
+                    Response.Redirect("Test.cshtml");
                 }
              else
                 {
