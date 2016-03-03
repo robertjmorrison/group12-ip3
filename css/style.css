@@ -6,6 +6,28 @@
     max-width: 100%;
 }
 
+#buttons li a{
+    text-decoration: none;
+    color: #FFFFFF;
+    display: block;
+}
+ 
+#buttons li a:hover {
+    text-decoration: none;
+    color: #000000;
+    background-color: #33B5E5;
+}
+
+#buttons li {
+    float: left;
+    list-style: none;
+    text-align: center;
+    background-color: #000000;
+    margin-right: 30px;
+    width: 150px;
+    line-height: 60px;
+}
+
 .banner {
     max-width: 100%;
 }
@@ -57,4 +79,29 @@ ul {
 #horizontal-bar-parent {
     position:relative;
     min-height:100%;
+}
+
+#mainmenu li {
+    float: left;
+    margin-right: 30px;
+    margin-bottom: 30px;
+    width: 150px;
+    line-height: 60px;
+    background-color: #808080;
+    border-style: dashed;
+    border-width: 1px;
+    text-align: center;
+}
+
+#mainmenu li a {
+    text-decoration: none;
+    color: #FFFFFF;
+    display: block;
+}
+
+#mainmenu li a:hover {
+    text-decoration: none;
+    color: #000000;
+    display: block;
+    background-color: #B3C9E9;
 }
