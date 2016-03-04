@@ -1,0 +1,162 @@
+@{
+    var firstName = "";
+    var lastName = "";
+    var userName = "";
+    var address = "";
+    var postCode = "";
+    var phoneNumber = "";
+    var email = "";
+    var password = "";
+
+    var errorMessage = "";
+
+    var userNameLogIn = "";
+    var passwordLogIn = "";
+    var loginErrorMessage = "";
+   if (IsPost)
+{
+        if (Request["submit"] == "Submit")
+    {
+    //button 1 was clicked
+  firstName = Request.Form["firstName"];
+  lastName = Request.Form["lastName"];
+  userName = Request.Form["userName"];
+  address = Request.Form["address"];
+  postCode = Request.Form["postCode"];
+  phoneNumber = Request.Form["phoneNumber"];
+  email = Request.Form["email"];
+  password = Request.Form["password"];
+
+
+  if(password.Length < 8)
+  {errorMessage = "Password must be 8 chars minimum";}
+  int number = 0;
+  if(int.TryParse(password, out number))
+  {
+          //textbox val is number
+  }
+  else
+  {
+      errorMessage = "Password must be a numerical value";
+  }
+
+  if (firstName.IsEmpty() || lastName.IsEmpty() || userName.IsEmpty() || phoneNumber.IsEmpty() || address.IsEmpty() || postCode.IsEmpty() || email.IsEmpty() || password.IsEmpty())
+  {errorMessage = "You must specify all fields.";}
+
+
+  // If all information is valid, create a new account
+  if (errorMessage=="")
+    {
+    var db = Database.Open("GCUCamera");
+    var user = db.QuerySingle("SELECT username FROM users WHERE LOWER(userName) = LOWER(@0)", userName);
+    if (user == null)
+      {
+      db.Execute("INSERT INTO users (firstName, lastName, userName, address, postCode, phoneNumber, email, password, admin) VALUES (@0, @1, @2, @3, @4, @5, @6, @7, 0)", firstName, lastName, userName, address, postCode, phoneNumber, email, password);
+      WebSecurity.CreateAccount(userName, password, false);
+      // Navigate back to the homepage and exit
+      Response.Redirect("admin.cshtml");
+      }
+      else
+      {errorMessage = "username address is already in use.";}
+
+    }
+    }
+
+        else if (Request["submit"] == "Sign In")
+
+        {
+            userNameLogIn = Request.Form["userNameLogIn"];
+            passwordLogIn = Request.Form["passwordLogIn"];
+
+             if (WebSecurity.UserExists(userNameLogIn))
+                {
+                    WebSecurity.Login(userNameLogIn, passwordLogIn, true);
+                    Response.Redirect("admin.cshtml");
+                }
+             else
+                {loginErrorMessage = "Login failed";}
+        }
+}
+    
+}
+
+
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    
+    <!-- JQueryUI -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    
+    <!-- Local CSS file -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Lato|Roboto|Open+Sans' rel='stylesheet' type='text/css'>
+
+</head>
+    
+<body>
+    
+
+
+<div class='row'>
+
+    <!-- Content Pane -->
+    <div class='col-sm-12'>
+        <div id = 'horizontal-bar-container'>
+            <div id = 'horizontal-bar'>
+                <a href='index.html'><img src = 'img/ideagen-logo.png'></a>
+            </div>
+        </div>
+        <img class = 'banner' src='img/splash1.jpg'>
+       
+    </div>
+</div>  
+<div class='row'>
+    <!-- Nav bar-->
+    <div id = 'navbar-parent' class='col-sm-1'>
+        <div id='navbar'>
+           
+        </div>
+    </div>
+     <div class='col-sm-10'>
+        <h2>Create Role</h2>
+         
+        <form action="" id="register_user" method="post">
+			<input type="text" placeholder="Enter first name" name="firstName"><br/><br/>
+      <input type="text" placeholder="Enter last name" name="lastName"><br/><br/>
+			<input type="email" placeholder="Enter email" name="email"><br/><br/>
+      Select user's role:   
+</br>	  
+      <select name="role">
+                <option value="admin">Admin</option>
+                <option value="manager">Manager</option>
+                <option value="user">User</option>
+      </select><br/><br/>
+      <input type="text" placeholder="Enter username" name="username"><br/><br/>
+      <input type="password" placeholder="Enter password" name="password"><br/><br/>
+      
+     <button type="submit">Save</button>
+		
+		</br></br>
+			<button type="submit">Back</button>
+	  
+</form>
+
+    </div>
+    <div class='col-sm-1'>
+    
+    </div>
+</div>
+
+</body>
+</html>
+
