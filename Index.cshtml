@@ -17,7 +17,7 @@ if(IsPost)
              if (WebSecurity.UserExists(userNameLogIn))
                 {
                     WebSecurity.Login(userNameLogIn, passwordLogIn, true);
-                    Response.Redirect("Test.cshtml");
+                    Response.Redirect("MainMenu.cshtml");
                 }
              else
                 {
