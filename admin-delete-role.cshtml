@@ -1,3 +1,53 @@
+@{
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+    var db = Database.Open("ProjectManager");
+    
+    var roles = db.Query("SELECT roleName, roleId FROM Roles");
+    var rolesNumber = db.QueryValue("SELECT COUNT(*) FROM Roles");
+
+    var errorMessage ="";
+    var roleId = 0;
+
+
+    long[] rolesId = new long[rolesNumber];
+    String[] rolesName = new String[rolesNumber];
+
+    var i = 0;
+    foreach (var x in roles)
+    {
+          rolesId[i] = @x.roleId;
+          rolesName[i] = @x.roleName;
+          i++;
+    }
+    
+    if(IsPost)
+    {
+        
+        if (Request["submit"] == "Delete Role")
+        {
+            roleId = Request.Form["role"].AsInt();
+            var usersInRole = db.QueryValue("SELECT COUNT(*) FROM Users WHERE roleId = @0", roleId);
+
+            if (usersInRole != 0)
+            {
+                errorMessage = "Users must be removed from role to delete.";
+            }
+
+            else
+            {
+                db.Execute("DELETE FROM Roles WHERE roleId = @0", roleId);
+                errorMessage = "Role deleted";
+                Response.Redirect("admin-delete-role.cshtml");
+            }
+
+        }
+
+    }
+         
+}     
 <html>
 <head>
     <!-- Latest compiled and minified CSS -->
@@ -26,43 +76,23 @@
 
 <div class='row'>
 
-    <!-- Content Pane -->
-    <div class='col-sm-12'>
-        <div id = 'horizontal-bar-container'>
-            <div id = 'horizontal-bar'>
-                <a href='index.html'><img src = 'img/ideagen-logo.png'></a>
-            </div>
-        </div>
-        <img class = 'banner' src='img/splash1.jpg'>
-       
-    </div>
-</div>  
-<div class='row'>
-    <!-- Nav bar-->
-    <div id = 'navbar-parent' class='col-sm-1'>
-        <div id='navbar'>
-           
-        </div>
-    </div>
-     <div class='col-sm-10'>
         <h2>Delete Role</h2>
          
         
          
-		<form 
-		<method="post">
-		<select name="role">
-                <option value=""></option>
-                <option value="role">unassigned 1</option>
-                <option value="role">unassigned 2</option>
-                <option value="role">unassigned 3</option>
+	  <form method="post">
+      <select name="role">
+        @for(int x=0; x<rolesNumber; x++)
+        {
+               <option selected value=@rolesId[x]>@rolesName[x]</option> 
+        }
+      </select><br/><br/>
+      <p>@errorMessage</p>
         </select>
         </br></br>
 		
-		<button type="submit">Delete Role</button>
-		</br></br>
-		
-			<button type="submit">Back</button>
+		<input type="submit" name="submit" value="Delete Role"> 		
+		<input type="submit" name="submit" value="Back"> 
 		</form>
     </div>
     <div class='col-sm-1'>

@@ -42,8 +42,7 @@
         userName = Request.Form["userName"];
         email = Request.Form["email"];
         password = Request.Form["password"];
-        roleId = 1;
-        roleId += Request["role"].AsInt();
+        roleId = Request.Form["role"].AsInt();
 
   
         if ( firstName== "" || lastName== "" || userName== "" || email== "" || password== "" )
@@ -64,7 +63,7 @@
               }
             else
               {
-                  errorMessage = "username address is already in use.";
+                  errorMessage = "username is already in use.";
               }
 
         }
@@ -116,7 +115,7 @@
       <select name="role">
         @for(int x=0; x<rolesNumber; x++)
         {
-               <option selected value="x">@rolesName[x]</option> 
+               <option value=@rolesId[x] >@rolesName[x]</option> 
         }
       </select><br/><br/>
       <p>@errorMessage</p>
