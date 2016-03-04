@@ -1,3 +1,72 @@
+@{
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+
+
+     var errorMessage ="";
+
+     var roleName = "";
+     var editPermissions = 0;
+     var createTemplate = 0;
+     var editTemplate = 0;
+     var closeReport = 0;
+     var changeReportStatus = 0;
+     var reopenReport = 0;
+     var createReport = 0;
+     var editReport = 0;
+     var addAttachment = 0;
+     var removeAttachment = 0;
+
+     if(IsPost)
+{
+
+            if (Request["submit"] == "Create Role")
+            {
+
+                var db = Database.Open("ProjectManager");
+
+                roleName = Request.Form["roleName"];
+                editPermissions = Request.Form["editPermissions"].AsInt();
+                createTemplate = Request.Form["createTemplate"].AsInt();
+                editTemplate = Request.Form["editTemplate"].AsInt();
+                closeReport = Request.Form["closeReport"].AsInt();
+                changeReportStatus = Request.Form["changeReportStatus"].AsInt();
+                reopenReport = Request.Form["reopenReport"].AsInt();
+                createReport = Request.Form["createReport"].AsInt();
+                editReport = Request.Form["editReport"].AsInt();
+                addAttachment = Request.Form["addAttachment"].AsInt();
+                removeAttachment = Request.Form["removeAttachment"].AsInt();
+
+                if (roleName == "")
+                {
+                    errorMessage = "Role name must be input.";
+                }
+                else
+                {
+                    var role = db.QuerySingle("SELECT roleName FROM Roles WHERE LOWER(roleName) = LOWER(@0)", roleName);
+
+                    if (role == null)
+                    {
+
+                        db.Execute("INSERT INTO Roles(roleName, rolesPermission , createTemp , editTemp , closeRep , statusRep , reopenRep , createRep , editRep , addAttach , removeAttach )VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10)", roleName, editPermissions, createTemplate, editTemplate, closeReport, changeReportStatus, reopenReport, createReport, editReport, addAttachment, removeAttachment);
+                        errorMessage = "Role created successfully";
+                    }
+                    else
+                    {
+                        errorMessage = "Role name is already in use.";
+                    }
+                }
+
+
+            }
+
+
+}
+
+}
+
 <html>
 <head>
     <!-- Latest compiled and minified CSS -->
@@ -26,49 +95,30 @@
 
 <div class='row'>
 
-    <!-- Content Pane -->
-    <div class='col-sm-12'>
-        <div id = 'horizontal-bar-container'>
-            <div id = 'horizontal-bar'>
-                <a href='index.html'><img src = 'img/ideagen-logo.png'></a>
-            </div>
-        </div>
-        <img class = 'banner' src='img/splash1.jpg'>
-       
-    </div>
-</div>  
-<div class='row'>
-    <!-- Nav bar-->
-    <div id = 'navbar-parent' class='col-sm-1'>
-        <div id='navbar'>
-           
-        </div>
-    </div>
-     <div class='col-sm-10'>
         <h2>Create Role</h2>
          
         
    
-		 <form>
-		 <input type="text" placeholder="Enter name of new role" name="role name"><br/><br/>
-		 <input type="checkbox" name="permissions" value="edit">Edit permissions<br>
-		 <input type="checkbox" name="permissions" value="create">Create templates<br>
-		 <input type="checkbox" name="permissions" value="edit">Edit templates<br>
-		 <input type="checkbox" name="permissions" value="close">Close reports<br>
-		 <input type="checkbox" name="permissions" value="status">Change report status<br>
-		 <input type="checkbox" name="permissions" value="reopen">Reopen report<br>
-		 <input type="checkbox" name="permissions" value="create">Create report<br>
-		 <input type="checkbox" name="permissions" value="edit">Edit report<br>
-		 <input type="checkbox" name="permissions" value="add">Add attachment<br>
-		 <input type="checkbox" name="permissions" value="remove">Remove attachment<br>
+		 <form action="" id="register_role" method="post">
+		 <input type="text" placeholder="Enter name of new role" name="roleName" value=""><br/><br/>
+		 <input type="checkbox" name="editPermissions" value="1" >Edit permissions<br>
+		 <input type="checkbox" name="createTemplate" value="1">Create templates<br>
+		 <input type="checkbox" name="editTemplate" value="1">Edit templates<br>
+		 <input type="checkbox" name="closeReport" value="1">Close reports<br>
+		 <input type="checkbox" name="changeReportStatus" value="1">Change report status<br>
+		 <input type="checkbox" name="reopenReport" value="1">Reopen report<br>
+		 <input type="checkbox" name="createReport" value="1">Create report<br>
+		 <input type="checkbox" name="editReport" value="1">Edit report<br>
+		 <input type="checkbox" name="addAttachment" value="1">Add attachment<br>
+		 <input type="checkbox" name="removeAttachment" value="1">Remove attachment<br>
 		 </br>
 		 		 
 		 
 		 		 
-		 <button type="submit">Create Role</button>
-		</br></br>
-		
-			<button type="submit">Back</button>
+      <p>@errorMessage</p>
+
+     <input type="submit" name="submit" value="Create Role"> 
+     <input type="submit" name="submit" value="Back"> 
 		</form>
     </div>
     <div class='col-sm-1'>
