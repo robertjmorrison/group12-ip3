@@ -1,0 +1,99 @@
+﻿@{
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+
+    var db = Database.Open("ProjectManager");
+    
+    var roles = db.Query("SELECT roleName, roleId FROM Roles");
+    var rolesNumber = db.QueryValue("SELECT COUNT(*) FROM Roles");
+
+    long[] rolesId = new long[rolesNumber];
+    String[] rolesName = new String[rolesNumber];
+
+    var i = 0;
+    foreach (var x in roles)
+    {
+          rolesId[i] = @x.roleId;
+          rolesName[i] = @x.roleName;
+          i++;
+    }
+
+     var roleName = "";
+     var editPermissions = 0;
+     var createTemplate = 0;
+     var editTemplate = 0;
+     var closeReport = 0;
+     var changeReportStatus = 0;
+     var reopenReport = 0;
+     var createReport = 0;
+     var editReport = 0;
+     var addAttachment = 0;
+     var removeAttachment = 0;
+
+     var roleId = 0;  
+
+    if (IsPost)
+    {
+
+        if (Request["submit"] == "Select Role")
+            {
+
+                 roleId = Request.Form["role"].AsInt();
+
+                 var selectedRole = db.Query("SELECT * FROM Roles WHERE roleId = @0", roleId);
+
+                 foreach (var x in selectedRole)
+                 {
+
+                     editPermissions = @x.rolesPermission;
+                     createTemplate = @x.createTemp;
+                     editTemplate = @x.editTemp;
+                     closeReport = @x.closeRep;
+                     changeReportStatus = @x.statusRep;
+                     reopenReport = @x.reopenRep;
+                     createReport = @x.createRep;
+                     editReport = @x.editRep;
+                     addAttachment = @x.addAttach;
+                     removeAttachment = @x.removeAttach;
+                 }
+            }
+
+    }
+
+}
+
+<div>  
+    <h2>Edit Role</h2>
+              
+    <form>
+        <p> Select role you wish to edit</p>
+        <select name="role">
+        @for(int x=0; x<rolesNumber; x++)
+        {
+               <option value=@rolesId[x] >@rolesName[x]</option> 
+        }
+        </select>
+        </br></br>
+		<input type="submit" name="submit" value="Select Role">
+        </br></br>      
+         <p>@roleId</p>
+        <input type="checkbox" name="Edit permissions" checked=@editPermissions >Edit permissions<br>
+        <input type="checkbox" name="Create templates" checked=@createTemplate >Create templates<br>
+        <input type="checkbox" name="Edit templates" checked=@editTemplate >Edit templates<br>
+        <input type="checkbox" name="Close reports" checked=@closeReport >Close reports<br>
+        <input type="checkbox" name="Change report status" checked=@changeReportStatus >Change report status<br>
+        <input type="checkbox" name="Reopen report" checked=@reopenReport >Reopen report<br>
+        <input type="checkbox" name="Create report" checked=@createReport >Create report<br>
+        <input type="checkbox" name="Edit report" checked=@editReport >Edit report<br>
+        <input type="checkbox" name="Add attachment" checked=@addAttachment >Add attachment<br>
+        <input type="checkbox" name="Remove attachment" checked=@removeAttachment >Remove attachment<br>
+        </br>
+	 		 
+        <input type="submit" name="submit" value="Edit Role">
+        </br></br>
+		
+        <input type="submit">Back</input>
+    </form>
+</div>

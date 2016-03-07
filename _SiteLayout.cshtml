@@ -26,22 +26,29 @@
 
 </head>
     <body>
-        <div class="page-wrapper">
-    @RenderPage("_Header.cshtml")
-
-        <div class="col-sm-1">
-            <!-- Sidebar will go here-->
+    <div class="page-wrapper">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Header-->
+                @RenderPage("_Header.cshtml")
+            </div>
         </div>
 
-        <div class="col-sm-10">
-            <!-- Main content pane, all primary views load here-->
-            @RenderBody()
-        </div>
+        <div class="row">
+            <div class="col-sm-1">
+                <!-- Navigation Bar-->
+                @RenderPage("_Navbar.cshtml")
+            </div>
+
+            <div class="col-sm-10">
+                <!-- Main content pane, all primary views load here-->
+                @RenderBody()
+            </div>
         
-        <div class="col-sm-1">
-        <!-- Empty Space-->
+            <div class="col-sm-1">
+            <!-- Empty Space-->
+            </div>
         </div>
-        
         </div>
 
     

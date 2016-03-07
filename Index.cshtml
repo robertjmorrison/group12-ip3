@@ -35,15 +35,8 @@ if(IsPost)
 
 <!DOCTYPE html>
 
-<div class='row'>
-    <!-- Nav bar-->
-    <!--div id = 'navbar-parent' class='col-sm-1'>
-        <div id='navbar'>
-           <p>Hello</p>
-        </div>
-    </div-->
 
-     <div id='login' class='col-sm-12'>
+     <div id='login'>
 
          @if(WebSecurity.IsAuthenticated)
  {
@@ -72,11 +65,6 @@ if(IsPost)
          <p>@loginErrorMessage</p>
 
         </div>
-
-    <!--div class='col-sm-1'>
-    <p></p>
-    </div-->
-</div>
 
 
 

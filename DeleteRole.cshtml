@@ -1,0 +1,67 @@
+﻿@{
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+    var db = Database.Open("ProjectManager");
+    
+    var roles = db.Query("SELECT roleName, roleId FROM Roles");
+    var rolesNumber = db.QueryValue("SELECT COUNT(*) FROM Roles");
+
+    var errorMessage ="";
+    var roleId = 0;
+
+
+    long[] rolesId = new long[rolesNumber];
+    String[] rolesName = new String[rolesNumber];
+
+    var i = 0;
+    foreach (var x in roles)
+    {
+          rolesId[i] = @x.roleId;
+          rolesName[i] = @x.roleName;
+          i++;
+    }
+    
+    if(IsPost)
+    {
+        
+        if (Request["submit"] == "Delete Role")
+        {
+            roleId = Request.Form["role"].AsInt();
+            var usersInRole = db.QueryValue("SELECT COUNT(*) FROM Users WHERE roleId = @0", roleId);
+
+            if (usersInRole != 0)
+            {
+                errorMessage = "Users must be removed from role to delete.";
+            }
+
+            else
+            {
+                db.Execute("DELETE FROM Roles WHERE roleId = @0", roleId);
+                errorMessage = "Role deleted";
+                Response.Redirect("admin-delete-role.cshtml");
+            }
+
+        }
+
+    }
+         
+}     
+<div>
+    <h2>Delete Role</h2>
+       
+    <form method="post">
+        <select name="role">
+            @for(int x=0; x<rolesNumber; x++)
+            {
+                    <option selected value=@rolesId[x]>@rolesName[x]</option> 
+            }
+        </select><br/><br/>
+        <p>@errorMessage</p>
+        </br></br>
+		
+        <input type="submit" name="submit" value="Delete Role"> 		
+        <input type="submit" name="submit" value="Back"> 
+    </form>
+</div>
