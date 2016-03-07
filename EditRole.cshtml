@@ -20,6 +20,47 @@
           i++;
     }
 
+     var roleName = "";
+     var editPermissions = 0;
+     var createTemplate = 0;
+     var editTemplate = 0;
+     var closeReport = 0;
+     var changeReportStatus = 0;
+     var reopenReport = 0;
+     var createReport = 0;
+     var editReport = 0;
+     var addAttachment = 0;
+     var removeAttachment = 0;
+
+     var roleId = 0;  
+
+    if (IsPost)
+    {
+
+        if (Request["submit"] == "Select Role")
+            {
+
+                 roleId = Request.Form["role"].AsInt();
+
+                 var selectedRole = db.Query("SELECT * FROM Roles WHERE roleId = @0", roleId);
+
+                 foreach (var x in selectedRole)
+                 {
+
+                     editPermissions = @x.rolesPermission;
+                     createTemplate = @x.createTemp;
+                     editTemplate = @x.editTemp;
+                     closeReport = @x.closeRep;
+                     changeReportStatus = @x.statusRep;
+                     reopenReport = @x.reopenRep;
+                     createReport = @x.createRep;
+                     editReport = @x.editRep;
+                     addAttachment = @x.addAttach;
+                     removeAttachment = @x.removeAttach;
+                 }
+            }
+
+    }
 
 }
 
@@ -35,22 +76,22 @@
         }
         </select>
         </br></br>
-		<input type="submit" name="selectRole">Select Role</input> 
-       
-         
-        <input type="checkbox" name="permissions" value="edit">Edit permissions<br>
-        <input type="checkbox" name="permissions" value="create">Create templates<br>
-        <input type="checkbox" name="permissions" value="edit">Edit templates<br>
-        <input type="checkbox" name="permissions" value="close">Close reports<br>
-        <input type="checkbox" name="permissions" value="status">Change report status<br>
-        <input type="checkbox" name="permissions" value="reopen">Reopen report<br>
-        <input type="checkbox" name="permissions" value="create">Create report<br>
-        <input type="checkbox" name="permissions" value="edit">Edit report<br>
-        <input type="checkbox" name="permissions" value="add">Add attachment<br>
-        <input type="checkbox" name="permissions" value="remove">Remove attachment<br>
+		<input type="submit" name="submit" value="Select Role">
+        </br></br>      
+         <p>@roleId</p>
+        <input type="checkbox" name="Edit permissions" checked=@editPermissions >Edit permissions<br>
+        <input type="checkbox" name="Create templates" checked=@createTemplate >Create templates<br>
+        <input type="checkbox" name="Edit templates" checked=@editTemplate >Edit templates<br>
+        <input type="checkbox" name="Close reports" checked=@closeReport >Close reports<br>
+        <input type="checkbox" name="Change report status" checked=@changeReportStatus >Change report status<br>
+        <input type="checkbox" name="Reopen report" checked=@reopenReport >Reopen report<br>
+        <input type="checkbox" name="Create report" checked=@createReport >Create report<br>
+        <input type="checkbox" name="Edit report" checked=@editReport >Edit report<br>
+        <input type="checkbox" name="Add attachment" checked=@addAttachment >Add attachment<br>
+        <input type="checkbox" name="Remove attachment" checked=@removeAttachment >Remove attachment<br>
         </br>
 	 		 
-        <input type="submit" name="editRole">Edit Role</input>
+        <input type="submit" name="submit" value="Edit Role">
         </br></br>
 		
         <input type="submit">Back</input>
