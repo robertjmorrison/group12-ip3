@@ -40,7 +40,6 @@
             {
                 db.Execute("DELETE FROM Roles WHERE roleId = @0", roleId);
                 errorMessage = "Role deleted";
-                Response.Redirect("admin-delete-role.cshtml");
             }
 
         }

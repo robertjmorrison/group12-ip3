@@ -6,6 +6,8 @@
 
     var db = Database.Open("ProjectManager");
     
+    var errorMessage = "";
+
     var roles = db.Query("SELECT roleName, roleId FROM Roles");
     var rolesNumber = db.QueryValue("SELECT COUNT(*) FROM Roles");
 
@@ -31,22 +33,21 @@
      var editReport = 0;
      var addAttachment = 0;
      var removeAttachment = 0;
-
      var roleId = 0;  
+     var selected = 0;
 
-    if (IsPost)
+    if(IsPost)
     {
+       if (Request["submit"] == "Select Role")
 
-        if (Request["submit"] == "Select Role")
-            {
-
+        {
                  roleId = Request.Form["role"].AsInt();
-
+                 
                  var selectedRole = db.Query("SELECT * FROM Roles WHERE roleId = @0", roleId);
 
                  foreach (var x in selectedRole)
                  {
-
+                     roleName = @x.roleName;
                      editPermissions = @x.rolesPermission;
                      createTemplate = @x.createTemp;
                      editTemplate = @x.editTemp;
@@ -58,42 +59,160 @@
                      addAttachment = @x.addAttach;
                      removeAttachment = @x.removeAttach;
                  }
+
+        }
+
+            if (Request["submit"] == "Edit Role")
+            {
+
+                roleId = Request.Form["role"].AsInt();
+                 
+
+
+                editPermissions = Request.Form["Edit permissions"].AsInt();
+                createTemplate = Request.Form["Create templates"].AsInt();
+                editTemplate = Request.Form["Edit templates"].AsInt();
+                closeReport = Request.Form["Close reports"].AsInt();
+                changeReportStatus = Request.Form["Change report status"].AsInt();
+                reopenReport = Request.Form["Reopen report"].AsInt();
+                createReport = Request.Form["Create report"].AsInt();
+                editReport = Request.Form["Edit report"].AsInt();
+                addAttachment = Request.Form["Add attachment"].AsInt();
+                removeAttachment = Request.Form["Remove attachment"].AsInt();
+
+
+                db.Query("UPDATE Roles SET rolesPermission = @0, createTemp = @1, editTemp = @2, closeRep = @3, statusRep = @4, reopenRep = @5, createRep = @6, editRep = @7, addAttach = @8, removeAttach = @9 WHERE roleId = @10;", editPermissions, createTemplate, editTemplate, closeReport, changeReportStatus, reopenReport, createReport, editReport, addAttachment, removeAttachment, roleId);
+                
+                errorMessage = "Role updated successfully";
+
+
+             }
+
+
             }
 
-    }
 
 }
+
+
 
 <div>  
     <h2>Edit Role</h2>
               
-    <form>
-        <p> Select role you wish to edit</p>
+    <form method="post">
+        <p> Select the role you wish to edit</p>
         <select name="role">
         @for(int x=0; x<rolesNumber; x++)
         {
-               <option value=@rolesId[x] >@rolesName[x]</option> 
+            if (@rolesId[x] == @roleId)
+            {
+                <option selected value=@rolesId[x] >@rolesName[x]</option>
+            }   
+            else
+            {
+                <option value=@rolesId[x] >@rolesName[x]</option>
+            }
+             
         }
         </select>
         </br></br>
 		<input type="submit" name="submit" value="Select Role">
         </br></br>      
-         <p>@roleId</p>
-        <input type="checkbox" name="Edit permissions" checked=@editPermissions >Edit permissions<br>
-        <input type="checkbox" name="Create templates" checked=@createTemplate >Create templates<br>
-        <input type="checkbox" name="Edit templates" checked=@editTemplate >Edit templates<br>
-        <input type="checkbox" name="Close reports" checked=@closeReport >Close reports<br>
-        <input type="checkbox" name="Change report status" checked=@changeReportStatus >Change report status<br>
-        <input type="checkbox" name="Reopen report" checked=@reopenReport >Reopen report<br>
-        <input type="checkbox" name="Create report" checked=@createReport >Create report<br>
-        <input type="checkbox" name="Edit report" checked=@editReport >Edit report<br>
-        <input type="checkbox" name="Add attachment" checked=@addAttachment >Add attachment<br>
-        <input type="checkbox" name="Remove attachment" checked=@removeAttachment >Remove attachment<br>
-        </br>
-	 		 
+
+        @if (@editPermissions == 1)
+          {
+                @:<input type="checkbox" name="Edit permissions" value="1" checked >Edit permissions</br>
+          }
+          else
+          {
+                @:<input type="checkbox" name="Edit permissions" value="1" >Edit permissions</br>        
+          }
+
+        @if (@createTemplate == 1)
+          {
+                @:<input type="checkbox" name="Create templates" value="1" checked >Create templates</br>
+          }
+          else
+          {
+                @:<input type="checkbox" name="Create templates" value="1">Create templates</br>
+          }
+
+        @if (@editTemplate == 1)
+          {
+                @:<input type="checkbox" name="Edit templates" value="1" checked >Edit templates</br>
+          }
+          else
+          {
+                @:<input type="checkbox" name="Edit templates" value="1" >Edit templates</br>
+          }
+
+        @if (@closeReport == 1)
+          {
+                @:<input type="checkbox" name="Close reports" value="1" checked >Close reports</br>
+          }
+          else
+          {
+                @:<input type="checkbox" name="Close reports" value="1" >Close reports</br>
+          }
+
+        @if (@changeReportStatus == 1)
+          {
+                @:<input type="checkbox" name="Change report status" value="1" checked >Change report status</br>
+          }
+          else
+          {
+                @:<input type="checkbox" name="Change report status" value="1">Change report status</br>
+          }
+
+        @if (@reopenReport == 1)
+          {
+                @:<input type="checkbox" name="Reopen report" value="1" checked >Reopen report</br>
+          }
+          else
+          {
+                @:<input type="checkbox" name="Reopen report" value="1" >Reopen report</br>        
+          }
+
+        @if (@createReport == 1)
+          {
+                @:<input type="checkbox" name="Create report" value="1" checked >Create report</br>
+          }
+          else
+          {
+                @:<input type="checkbox" name="Create report" value="1">Create report</br>
+          }
+
+        @if (@editReport == 1)
+          {
+                @:<input type="checkbox" name="Edit report" value="1" checked >Edit report</br>
+          }
+          else
+          {
+                @:<input type="checkbox" name="Edit report" value="1" >Edit report</br>
+          }
+
+        @if (@addAttachment == 1)
+          {
+                @:<input type="checkbox" name="Add attachment" value="1" checked >Add attachment</br>
+          }
+          else
+          {
+                @:<input type="checkbox" name="Add attachment" value="1" >Add attachment</br>
+          }
+
+        @if (@removeAttachment == 1)
+          {
+                @:<input type="checkbox" name="Remove attachment" value="1" checked >Remove attachment</br>
+          }
+          else
+          {
+                @:<input type="checkbox" name="Remove attachment" value="1">Remove attachment</br>
+          }
+
+        </br></br>	 		 
         <input type="submit" name="submit" value="Edit Role">
-        </br></br>
-		
-        <input type="submit">Back</input>
+        <input type="submit" name="submit" value="Back">
+        <p>@errorMessage</p>
+        </br>
     </form>
 </div>
