@@ -3,6 +3,7 @@
      {
        Response.Redirect("Index.cshtml");    
      }
+
     var db = Database.Open("ProjectManager");
     
     var roles = db.Query("SELECT roleName, roleId FROM Roles");
@@ -54,7 +55,7 @@
         <select name="role">
             @for(int x=0; x<rolesNumber; x++)
             {
-                    <option selected value=@rolesId[x]>@rolesName[x]</option> 
+                    <option value=@rolesId[x]>@rolesName[x]</option> 
             }
         </select><br/><br/>
         <p>@errorMessage</p>

@@ -1,34 +1,123 @@
 ﻿@{
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+    var db = Database.Open("ProjectManager");
     
-}
+    var errorMessage = "";
+    var successMessage = "";
 
+    var roles = db.Query("SELECT roleName, roleId FROM Roles");
+    var rolesNumber = db.QueryValue("SELECT COUNT(*) FROM Roles");
+
+    long[] rolesId = new long[rolesNumber];
+    String[] rolesName = new String[rolesNumber];
+    
+
+    var i = 0;
+    foreach (var x in roles)
+    {
+          rolesId[i] = @x.roleId;
+          rolesName[i] = @x.roleName;
+          i++;
+    }
+        
+    var userName = "";
+    var roleId = 0;
+    var firstName = "";
+    var lastName = "";
+    var email = "";
+
+    if(IsPost)
+    {   
+
+            if (Request["submit"] == "Search")
+            {
+                userName = Request.Form["searchInput"];
+
+                var user = db.Query("SELECT  fName, lName, email, roleId FROM Users WHERE userName = @0 ", userName);
+
+                var count = db.QueryValue("SELECT COUNT(*) FROM Users WHERE userName = @0", userName);
+
+                if(count > 0)
+                {
+                    foreach (var x in user)
+                        {
+                              firstName = @x.fName;
+                              lastName = @x.lName;
+                              email = @x.email;
+                              roleId = @x.roleId;
+                        }
+
+                     errorMessage = "User Found";
+                }
+                else
+                {
+                    errorMessage = "Invalid User Name";
+                }
+
+            }
+
+            if (Request["submit"] == "Save")
+            {
+
+                userName = Request.Form["searchInput"];
+                firstName =  Request.Form["firstName"];
+                lastName = Request.Form["lastName"];
+                email = Request.Form["email"];
+                roleId = Request.Form["role"].AsInt();
+
+                db.Execute("UPDATE Users SET fName = @0, lName = @1, email= @2, roleId= @3 WHERE userName = @4;", firstName, lastName, email, roleId, userName);
+
+                successMessage = "Changes Saved.";
+
+                userName = "";
+                firstName =  "";
+                lastName = "";
+                email = "";
+                roleId = 0;
+
+            }
+    }
+
+
+}
 <div>
     <h2>Edit User</h2>
 
     <form method="post">
-        <input type="text" placeholder="Search..." required></br>
-        <input type="button" value="Search">
+        <input type="text" placeholder="Search by User Name..." name="searchInput" value="@userName" ></br>
+        <input type="submit" name="submit" value="Search">
         </br></br>
-		 
-        <input type="text" placeholder="First name" name="firstName"><br/></br>
-        <input type="text" placeholder="Last name" name="lastName"></br></br>
-        <input type="email" placeholder="Email Address" name="email"><br/></br>
+		<p>@errorMessage</p> 
+        <input type="text" placeholder="First name" name="firstName" value="@firstName"><br/></br>
+        <input type="text" placeholder="Last name" name="lastName" value="@lastName"></br></br>
+        <input type="email" placeholder="Email Address" name="email" value="@email"><br/></br>
 		 
         <h4>Choose a Role</h4>
 		
         <select name="role">
-            <option value=""></option>
-            <option value="admin">Admin</option>
-            <option value="manager">Manager</option>
-            <option value="user">User</option>
+        @for(int x=0; x<rolesNumber; x++)
+        {
+            if (@rolesId[x] == @roleId)
+            {
+                <option selected value=@rolesId[x] >@rolesName[x]</option>
+            }   
+            else
+            {
+                <option value=@rolesId[x] >@rolesName[x]</option>
+            }
+             
+        }
         </select>
         </br></br>
 		
-        <input type="text" placeholder="Username" name="username"><br/><br/>
-        <input type="password" placeholder="password" name="password"><br/><br/>
-        <button type="submit">Save</button>
-		
+
+        <input type="submit" name="submit" value="Save">
+
+        <input type="submit" name="submit" value="Back">
         </br></br>
-        <button type="submit">Back</button>
+        <p>@successMessage</p>
     </form>
 </div>
