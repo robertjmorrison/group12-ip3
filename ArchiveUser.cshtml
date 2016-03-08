@@ -1,23 +1,80 @@
 ﻿@{
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+    var db = Database.Open("ProjectManager");
     
+    var errorMessage = "";
+    var successMessage = "";
+
+        
+    var userName = "";
+    var firstName = "";
+    var lastName = "";
+
+    if(IsPost)
+    {   
+
+            if (Request["submit"] == "Search")
+            {
+                userName = Request.Form["searchInput"];
+
+                var user = db.Query("SELECT  fName, lName FROM Users WHERE userName = @0 ", userName);
+
+                var count = db.QueryValue("SELECT COUNT(*) FROM Users WHERE userName = @0", userName);
+
+                if(count > 0)
+                {
+                    foreach (var x in user)
+                        {
+                              firstName = @x.fName;
+                              lastName = @x.lName;
+                        }
+
+                     errorMessage = "User Found";
+                }
+                else
+                {
+                    errorMessage = "Invalid User Name";
+                }
+
+            }
+
+            if (Request["submit"] == "Archive")
+            {
+
+                userName = Request.Form["searchInput"];
+
+                db.Execute("UPDATE Users SET status = 'Archived' WHERE userName = @0;", userName );
+
+                successMessage = "Changes Saved.";
+
+                userName = "";
+                firstName =  "";
+                lastName = "";
+
+            }
+    }
+
+
 }
 <div>
     <h2>Archive User</h2>
 
-    <form>
-        <input type="text" placeholder="Search..." required>
-        <input type="button" value="Search">
+    <form method="post">
+        <input type="text" placeholder="Search by User Name..." name="searchInput" value="@userName" ></br>
+        <input type="submit" name="submit" value="Search">
         </br></br>
-	 
-        <input type="text" placeholder="First name" name="firstName"><br/><br/>
-        <input type="text" placeholder="Last name" name="lastName"><br/><br/>
-        <input type="email" placeholder="Username" name="username"><br/><br/>
+		<p>@errorMessage</p> 
+        <input type="text" placeholder="First name" name="firstName" value="@firstName"><br/></br>
+        <input type="text" placeholder="Last name" name="lastName" value="@lastName"></br></br>
 		 
 		 
-        <button type="submit">Archive</button>
+        <input type="submit" name="submit" value="Archive">
+
+        <input type="submit" name="submit" value="Back">
         </br></br>
-		 
-		
-        <button type="submit">Back</button>
+        <p>@successMessage</p>
     </form>
 </div>
