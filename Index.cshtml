@@ -36,35 +36,40 @@ if(IsPost)
 <!DOCTYPE html>
 
 
-     <div id='login'>
+     <div id='wrapper'>
 
          @if(WebSecurity.IsAuthenticated)
  {
-     @:<form name="login" action="" method="post" accept-charset="utf-8">
+     @:<form id="loginform" name="login" action="" method="post" accept-charset="utf-8">
          <input type="submit" name="submit" value="log out" />
     @:</form>
 
  }
  else 
  {  
-                 <h1>Login</h1>
-            @:<form name="login" action="" method="post" accept-charset="utf-8">
-            @:<input type="text" name="username" placeholder="username"></br>
-            @:<input type="password" name="password" placeholder="password"></br>
-            <span>
-                <input type="checkbox" name="checkbox">
-                <label for="checkbox">remember</label>
-            </span>
-            <input type="submit" name="submit" value="log in">
 
-            @:</form>
+
+
+  @:<form id="loginform" name="login" action="" method="post" accept-charset="utf-8" class="login">
+    <p class="title">Log in</p>
+    @:<input type="text" name='username'placeholder="Username"/>
+    <i class="fa fa-user"></i>
+    @:<input type="password" name="password" placeholder="Password" />
+    <i class="fa fa-key"></i>
+    <a href="#">Forgot your password?</a>
+    <button type="submit" name="submit" value="log in">
+    <i class="spinner"></i>
+    <span class="state">Log in</span>
+    </button>
+    @:</form>
+ 
+    
+
     }
-    <a href='MainMenu.cshtml'>Admin</a>
-    <a href='MainMenu.cshtml'>User</a>
-    <a href='MainMenu.cshtml'>Manager</a>
+         </div>
          <p>@loginErrorMessage</p>
 
-        </div>
+</div>
 
 
 
