@@ -86,7 +86,7 @@
 <div>
     <h2>Edit User</h2>
 
-    <form method="post">
+    <form class='login' method="post">
         <input type="text" placeholder="Search by User Name..." name="searchInput" value="@userName" ></br>
         <input type="submit" name="submit" value="Search">
         </br></br>
@@ -95,7 +95,7 @@
         <input type="text" placeholder="Last name" name="lastName" value="@lastName"></br></br>
         <input type="email" placeholder="Email Address" name="email" value="@email"><br/></br>
 		 
-        <h4>Choose a Role</h4>
+        <p>Choose a role for this user</p>
 		
         <select name="role">
         @for(int x=0; x<rolesNumber; x++)
@@ -111,13 +111,10 @@
              
         }
         </select>
-        </br></br>
 		
 
         <input type="submit" name="submit" value="Save">
 
-        <input type="submit" name="submit" value="Back">
-        </br></br>
         <p>@successMessage</p>
     </form>
 </div>

@@ -32,7 +32,7 @@
                               lastName = @x.lName;
                         }
 
-                     errorMessage = "User Found";
+                     errorMessage = "Do you want to archive " + userName + "?";
                 }
                 else
                 {
@@ -62,18 +62,14 @@
 <div>
     <h2>Archive User</h2>
 
-    <form method="post">
+    <form class='login' method="post">
         <input type="text" placeholder="Search by User Name..." name="searchInput" value="@userName" ></br>
         <input type="submit" name="submit" value="Search">
         </br></br>
-		<p>@errorMessage</p> 
-        <input type="text" placeholder="First name" name="firstName" value="@firstName"><br/></br>
-        <input type="text" placeholder="Last name" name="lastName" value="@lastName"></br></br>
+		<p>@errorMessage</p> 	 
 		 
-		 
-        <input type="submit" name="submit" value="Archive">
+        <button type="submit" name="submit" value="Archive">Archive</button>
 
-        <input type="submit" name="submit" value="Back">
         </br></br>
         <p>@successMessage</p>
     </form>
