@@ -80,25 +80,29 @@
 
       <h2>Create User</h2>
          
-      <form action="" id="register_user" method="post">
+      <form action="" id="register_user" method="post" class="login">
 
-	  <input type="text" placeholder="Enter first name" name="firstName" value=""><br/><br/>
-      <input type="text" placeholder="Enter last name" name="lastName" value=""><br/><br/>
-	  <input type="email" placeholder="Enter email" name="email" value=""><br/><br/>
-      <input type="text" placeholder="Enter username" name="userName" value=""><br/><br/>
-      <input type="password" placeholder="Enter password" name="password" value=""><br/><br/>
-      <p>Select user's role: </p>  
+	  <input type="text" placeholder="Enter first name" name="firstName" value=""><br/>
+      <input type="text" placeholder="Enter last name" name="lastName" value=""><br/>
+	  <input type="email" placeholder="Enter email" name="email" value=""><br/>
+      <input type="text" placeholder="Enter username" name="userName" value=""><br/>
+      <input type="password" placeholder="Enter password" name="password" value=""><br/>
+      <p>What role will this user have?</p>
+       
       </br>	  
       <select name="role">
         @for(int x=0; x<rolesNumber; x++)
         {
                <option value=@rolesId[x] >@rolesName[x]</option> 
         }
-      </select><br/><br/>
+      </select><br/>
+          <a href="NewRole.cshtml">I want to create a new role</a> <br/>
       <p>@errorMessage</p>
-     <input type="submit" name="submit" value="Save"> 
-     <input type="submit" name="submit" value="Back"> 
+     <button type="submit" name="submit"><span class="state">Save</span> </button>
+     
      </form>
+
+
      
     </div>
 </div>
