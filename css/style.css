@@ -114,7 +114,7 @@ ul {
 }
 
 
-#loginform, #register_user {
+#loginform, #register_user, #register_role {
     display: inline-block;
     margin-left: 0 auto;
     margin-right: 0 auto;
