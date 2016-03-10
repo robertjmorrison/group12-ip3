@@ -51,7 +51,7 @@
 <div>
     <h2>Delete Role</h2>
        
-    <form method="post">
+    <form id='loginform' class='login' method="post">
         <select name="role">
             @for(int x=0; x<rolesNumber; x++)
             {
@@ -61,7 +61,6 @@
         <p>@errorMessage</p>
         </br></br>
 		
-        <input type="submit" name="submit" value="Delete Role"> 		
-        <input type="submit" name="submit" value="Back"> 
+        <button type="submit" name="submit" value="Delete Role">Delete Role</button>	
     </form>
 </div>

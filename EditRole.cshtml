@@ -99,7 +99,7 @@
 <div>  
     <h2>Edit Role</h2>
               
-    <form method="post">
+    <form id='loginform' method="post" class="login">
         <p> Select the role you wish to edit</p>
         <select name="role">
         @for(int x=0; x<rolesNumber; x++)
@@ -210,8 +210,7 @@
           }
 
         </br></br>	 		 
-        <input type="submit" name="submit" value="Edit Role">
-        <input type="submit" name="submit" value="Back">
+        <button type="submit" name="submit" value="Edit Role">Edit Role</button>
         <p>@errorMessage</p>
         </br>
     </form>
