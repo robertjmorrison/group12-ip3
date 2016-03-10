@@ -1,19 +1,42 @@
 ﻿@{
-    
-}
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+    var db = Database.Open("ProjectManager");
 
-<div>
-<h2>New Report</h2>
-         
-        <p>Please select an incident type</p>
-        <ul>
-            <li><a href=''>Aircraft Malfunction</a></li> 
-            <li><a href=''>Passenger Incident</a></li> 
-            <li><a href=''>Security Breach</a></li> 
-            <li><a href=''>Missing Equipment</a></li> 
-        </ul>
-		</br>
-		<form action="">
-			<button type="submit">Back</button>
-		</form>
-</div>
+    var templateName = "TestTemplate";
+    var templateObj = db.QueryValue("SELECT templateObj FROM Templates WHERE templateName = @0", templateName);
+
+     
+    var errorMessage = "";
+    
+
+}
+<link rel="stylesheet" type="text/css" media="screen" href="css/form-builder.css">
+
+<form method="post">
+    <h2>@templateName</h2></br>
+
+    <input type="text" name ="templateObj" id="form-builder-template" value="@templateObj" >   
+    <input type="submit" name="submit" value="Save Report">
+    <input type="submit" name="submit" value="Back"></br>
+    <p>@errorMessage</p>
+</form>
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <script src="js/form-render.js"></script>
+
+    <script>
+        jQuery(document).ready(function ($) {
+            'use strict';
+            var template = document.getElementById('form-builder-template');
+
+
+            $(template).formRender();
+        });
+    </script>
