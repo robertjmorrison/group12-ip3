@@ -8,22 +8,36 @@
     var templateName = "TestTemplate";
     var templateObj = db.QueryValue("SELECT templateObj FROM Templates WHERE templateName = @0", templateName);
 
-     
+    var reportObj =""; 
     var errorMessage = "";
-    
+
+
+    if(IsPost)
+    {
+        if (Request["submit"] == "Send Report")
+            {
+                reportObj = Request.Form["hiddenSerializeString"];
+            }
+    }    
 
 }
 <link rel="stylesheet" type="text/css" media="screen" href="css/form-builder.css">
 
-<form method="post">
+<form id="testForm" method="post">
     <h2>@templateName</h2></br>
 
-    <input type="text" name ="templateObj" id="form-builder-template" value="@templateObj" >   
-    <input type="submit" name="submit" value="Save Report">
+    <input type="text" name ="reportObj" id="form-builder-template" value="@templateObj" >  
+    <button type="button" id="serialize" >Save Report</button>
+     </br></br></br>
+    <input style="display: none" type="submit" name="submit" id="showOnSave" value="Send Report">
     <input type="submit" name="submit" value="Back"></br>
     <p>@errorMessage</p>
 </form>
 
+<form id="hiddenForm" method="post">
+     <input hidden type="text" id="serializedString"  name ="hiddenSerializeString" value="">
+
+</form>
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -36,7 +50,50 @@
             'use strict';
             var template = document.getElementById('form-builder-template');
 
-
             $(template).formRender();
+        });
+
+        var serializedString = "";
+        
+        $('#serialize').click(function () {
+            $('#showOnSave').show();
+            serializedString = $('#testForm').serialize();
+            $('#serializedString').val(serializedString);      
+        })
+
+
+        $.fn.deserialize = function (serializedString) {
+            var $form = $(this);
+            $form[0].reset();
+            serializedString = serializedString.replace(/\+/g, '%20');
+            var formFieldArray = serializedString.split("&");
+            $populateFeedback.slideDown().html('');
+            $.each(formFieldArray, function (i, pair) {
+                var nameValue = pair.split("=");
+                var name = decodeURIComponent(nameValue[0]);
+                var value = decodeURIComponent(nameValue[1]);
+                // Find one or more fields
+                var $field = $form.find('[name=' + name + ']');
+                console.log(name, value);
+                $populateFeedback.append('<li>' + name + ' = ' + value + '</li>');
+
+                if ($field[0].type == "radio"
+                        || $field[0].type == "checkbox") {
+                    var $fieldWithValue = $field.filter('[value="' + value + '"]');
+                    var isFound = ($fieldWithValue.length > 0);
+                    if (!isFound && value == "on") {
+                        $field.first().prop("checked", true);
+                    } else {
+                        $fieldWithValue.prop("checked", isFound);
+                    }
+                } else {
+                    $field.val(value);
+                }
+            });
+        }
+
+        $('#deserialize').click(function () {
+            // console.log("serializedString = ", serializedString, decodeURIComponent(serializedString));
+            $form.deserialize(serializedString);
         });
     </script>

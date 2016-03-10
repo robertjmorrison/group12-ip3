@@ -260,6 +260,8 @@ Author: Kevin Chappell <kevin.b.chappell@gmail.com>
       return fieldAttrs;
     };
 
+
+
     // Begin the core plugin
     this.each(function () {
       var rendered = [];
@@ -296,6 +298,7 @@ Author: Kevin Chappell <kevin.b.chappell@gmail.com>
           $template.replaceWith(output);
         }
       }
+
     });
   };
 })(jQuery);
