@@ -5,18 +5,72 @@
      }
     var db = Database.Open("ProjectManager");
 
+    var incidentName = "";
+    var incidentId = 0;
+    DateTime incidentDate;
+
     var templateName = "TestTemplate";
     var templateObj = db.QueryValue("SELECT templateObj FROM Templates WHERE templateName = @0", templateName);
+
+    var userId = WebSecurity.CurrentUserId;
 
     var reportObj =""; 
     var errorMessage = "";
 
+    var zeroVal = 0;
+    var newIncident = "New Incident";
+
+    var incidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Active' ");
+    var incidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents");
+
+    long[] incidentsId = new long[incidentsNumber];
+    String[] incidentsName = new String[incidentsNumber];
+    
+
+
+
+    var i = 0;
+    foreach (var x in incidents)
+    {
+          incidentsId[i] = @x.incidentId;
+          incidentsName[i] = @x.incidentName;
+          i++;
+    }
 
     if(IsPost)
     {
+
         if (Request["submit"] == "Send Report")
             {
+                incidentId = Request.Form["incident"].AsInt();
+                if (incidentId == 0)
+                {
+                    errorMessage ="error 2";
+                    incidentName = Request.Form["incidentName"];
+                    incidentDate = Request.Form["incidentDate"].AsDateTime();
+
+                    if ( incidentName== "" || incidentDate == null )
+                    {
+                        errorMessage = "You must specify all fields.";
+                    }
+
+
+                    // If all information is valid, create a new account
+                    if (errorMessage=="")
+                    {
+                        var checkIncident = db.QuerySingle("SELECT incidentName FROM Incidents WHERE LOWER(incidentName) = LOWER(@0)", incidentName);
+                        if (checkIncident == null)
+                        {
+                            db.Execute("INSERT INTO Incidents (incidentName, incidentDate) VALUES (@0, @1)", incidentName, incidentDate );
+
+                            incidentId = db.QueryValue("SELECT incidentId FROM Incidents WHERE incidentName = @0", incidentName); 
+                        }
+                    }
+                }
+
                 reportObj = Request.Form["hiddenSerializeString"];
+
+                db.Execute("INSERT INTO Reports (reportObj, userId, incidentId, templateObj) VALUES (@0, @1, @2, @3)", reportObj, userId, incidentId, templateObj);
             }
     }    
 
@@ -24,20 +78,40 @@
 <link rel="stylesheet" type="text/css" media="screen" href="css/form-builder.css">
 
 <form id="testForm" method="post">
-    <h2>@templateName</h2></br>
 
-    <input type="text" name ="reportObj" id="form-builder-template" value="@templateObj" >  
+    <h2>@templateName</h2></br>
+    <select name="incident" id="incident">
+        
+        @for(int x=0; x<incidentsNumber; x++)
+        {
+            if (@incidentsId[x] == @incidentId)
+            {
+                <option selected value=@incidentsId[x] >@incidentsName[x]</option>
+            }   
+            else
+            {
+                <option value=@incidentsId[x] >@incidentsName[x]</option>
+            }
+   
+        }
+                <option value=@zeroVal >@newIncident</option>
+    </select>
+    </br></br>
+     
+    <input type="text" name ="incidentName" placeholder="Enter Incident Name" class ="newIncident" >
+    <input type="datetime-local" name ="incidentDate" class ="newIncident" >
+    </br></br></br>
+
+    <input type="text" name ="reportObj" id="form-builder-template" value="@templateObj" >
+      
     <button type="button" id="serialize" >Save Report</button>
      </br></br></br>
     <input style="display: none" type="submit" name="submit" id="showOnSave" value="Send Report">
     <input type="submit" name="submit" value="Back"></br>
     <p>@errorMessage</p>
+    <input  type="text" id="serializedString"  name ="hiddenSerializeString" value="" >
 </form>
 
-<form id="hiddenForm" method="post">
-     <input hidden type="text" id="serializedString"  name ="hiddenSerializeString" value="">
-
-</form>
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -47,9 +121,9 @@
 
     <script>
         jQuery(document).ready(function ($) {
+            $('.newIncident').hide();
             'use strict';
             var template = document.getElementById('form-builder-template');
-
             $(template).formRender();
         });
 
@@ -57,11 +131,30 @@
         
         $('#serialize').click(function () {
             $('#showOnSave').show();
+
             serializedString = $('#testForm').serialize();
             $('#serializedString').val(serializedString);      
         })
 
+        $('#incident').change(function(){
 
+            if ($(this).val() == "0")
+            {
+                $('.newIncident').show();
+            }
+            else
+            {
+                $('.newIncident').hide();
+            }
+
+        });
+
+
+
+
+
+
+        // to use on view form pages
         $.fn.deserialize = function (serializedString) {
             var $form = $(this);
             $form[0].reset();
