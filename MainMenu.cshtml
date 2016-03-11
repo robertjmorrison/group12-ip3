@@ -1,7 +1,44 @@
 @{
+         var editPermissions = 0;
+         var createTemplate = 0;
+         var editTemplate = 0;
+         var closeReport = 0;
+         var changeReportStatus = 0;
+         var reopenReport = 0;
+         var createReport = 0;
+         var editReport = 0;
+         var addAttachment = 0;
+         var removeAttachment = 0;
+         var roleId = 0;  
+         var selected = 0;
     
-    // Here we need to decide what kind of account this is: User, Manager or Admin
-    // Once we've stored this info, generate their options based on account type
+    if(WebSecurity.IsAuthenticated)
+     {
+        var db = Database.Open("ProjectManager");
+
+         var userId = WebSecurity.CurrentUserId;
+         var userRole = db.QueryValue("SELECT roleId FROM Users WHERE userId = @0", userId);
+         var role = db.Query("SELECT * FROM Roles WHERE roleId = @0", userRole);
+
+
+
+     foreach (var x in role)
+        {
+
+             editPermissions = @x.rolesPermission;
+             createTemplate = @x.createTemp;
+             editTemplate = @x.editTemp;
+             closeReport = @x.closeRep;
+             changeReportStatus = @x.statusRep;
+             reopenReport = @x.reopenRep;
+             createReport = @x.createRep;
+             editReport = @x.editRep;
+             addAttachment = @x.addAttach;
+             removeAttachment = @x.removeAttach;
+        }
+     }
+    
+
     
 }
 
@@ -9,17 +46,43 @@
 <div id="navbar-parent">
 <div id="navbar">
     <ul>
-        <li><a href="NewUser.cshtml">Create User</a></li>
-        <li><a href="EditUser.cshtml">Edit User</a></li>
-        <li><a href="ArchiveUser.cshtml">Archive User</a></li>
-        <li><a href="NewRole.cshtml">Create Role</a></li>
-        <li><a href="EditRole.cshtml">Edit Role</a></li>
-        <li><a href="DeleteRole.cshtml">Delete Role</a></li>
-        <li><a href="NewReportType.cshtml">Submit New Report</a></li>
-        <li><a href="NewTemplate.cshtml">Create Template</a></li>
-        <li><a href="ManageReports.cshtml">Manage Reports</a></li>
-        <li><a href="ManageTemplates.cshtml">Manage Templates</a></li>
-        <li><a href="DeleteTemplate.cshtml">Delete Templates</a></li>
+         @if(WebSecurity.IsAuthenticated)
+     {
+        if (editPermissions == 1)
+        {
+            <li><a href="EditRole.cshtml">Edit Role</a></li>
+            <li><a href="NewUser.cshtml">Create User</a></li>
+            <li><a href="EditUser.cshtml">Edit User</a></li>
+            <li><a href="ArchiveUser.cshtml">Archive User</a></li>
+            <li><a href="NewRole.cshtml">Create Role</a></li>
+            <li><a href="DeleteRole.cshtml">Delete Role</a></li>
+        }
+
+        if (createReport == 1)
+        {
+            <li><a href="NewReportType.cshtml">Submit New Report</a></li>
+            <li><a href="ManageReports.cshtml">Manage Reports</a></li>
+        }
+        if (createTemplate == 1)
+        {
+            <li><a href="NewTemplate.cshtml">Create Template</a></li>
+        }
+        if (editTemplate ==1 )
+        {
+            <li><a href="ManageTemplates.cshtml">Manage Templates</a></li>
+            <li><a href="DeleteTemplate.cshtml">Delete Templates</a></li>
+        }
+    }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     </ul>
 </div>
 </div>
