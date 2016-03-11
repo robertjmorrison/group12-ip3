@@ -139,15 +139,15 @@
     <input type="submit" name ="submit" value="View Archived Reports">
     </form>
     </br></br>
-
+    <ul>
     @if(IsPost)
     {
        for(int x=0; x<@reportsNumber; x++)
             {
-               <a href="ViewReport.cshtml?id=@reportsId[x]"><p>@reportsName[x]</p></a><br/>
+               <li><a href="ViewReport.cshtml?id=@reportsId[x]"><p>@reportsName[x]</p></a></li>
             }
     }
-
+    </ul>
 
 
 </div>

@@ -27,11 +27,11 @@
 
 <div>
     <form action="">
-        <p>Please select a template to edit</p>
+        <p>Please select the type of report you wish to submit</p>
         <ul>
        @for(int x=0; x<@templatesNumber; x++)
             {
-               <li><a href="EditTemplate.cshtml?id=@templatesId[x]"><p>@templatesName[x]</p></a></li>
+               <li><a href="NewReport.cshtml?id=@templatesId[x]"><p>@templatesName[x]</p></a></li>
             }
         </ul>
 

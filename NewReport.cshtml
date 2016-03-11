@@ -9,9 +9,10 @@
     var incidentId = 0;
     DateTime incidentDate;
 
-    var templateName = "TestTemplate";
-    var templateObj = db.QueryValue("SELECT templateObj FROM Templates WHERE templateName = @0", templateName);
-
+    
+    var templateId = Request["id"];
+    var templateObj = db.QueryValue("SELECT templateObj FROM Templates WHERE templateId = @0", templateId);
+    var templateName = db.QueryValue("SELECT templateName FROM Templates WHERE templateId = @0", templateId);;
     var userId = WebSecurity.CurrentUserId;
 
     var reportName ="";
@@ -109,9 +110,8 @@
     <button type="button" id="serialize" >Save Report</button>
      </br></br></br>
     <input style="display: none" type="submit" name="submit" id="showOnSave" value="Send Report">
-    <input type="submit" name="submit" value="Back"></br>
     <p>@errorMessage</p>
-    <input  type="text" id="serializedString"  name ="hiddenSerializeString" value="" >
+    <input hidden type="text" id="serializedString"  name ="hiddenSerializeString" value="" >
 </form>
 
 
