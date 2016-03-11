@@ -5,7 +5,7 @@
      }
     var db = Database.Open("ProjectManager");
 
-    var reportId = 14;
+    var reportId = Request["id"];
 
     var templateObj = db.QueryValue("SELECT templateObj FROM Reports WHERE reportId = @0", reportId);
     var reportObj = db.QueryValue("SELECT reportObj FROM Reports WHERE reportId = @0", reportId);

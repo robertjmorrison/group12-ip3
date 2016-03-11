@@ -14,6 +14,7 @@
 
     var userId = WebSecurity.CurrentUserId;
 
+    var reportName ="";
     var reportObj =""; 
     var errorMessage = "";
 
@@ -40,6 +41,8 @@
         if (Request["submit"] == "Send Report")
             {
                 incidentId = Request.Form["incident"].AsInt();
+                reportName = Request.Form["reportName"];
+
                 if (incidentId == 0)
                 {
                     errorMessage ="error 2";
@@ -67,7 +70,7 @@
 
                 reportObj = Request.Form["hiddenSerializeString"];
 
-                db.Execute("INSERT INTO Reports (reportObj, userId, incidentId, templateObj) VALUES (@0, @1, @2, @3)", reportObj, userId, incidentId, templateObj);
+                db.Execute("INSERT INTO Reports (reportObj, userId, incidentId, templateObj, reportName) VALUES (@0, @1, @2, @3, @4)", reportObj, userId, incidentId, templateObj, reportName);
             }
     }    
 
@@ -98,6 +101,8 @@
     <input type="text" name ="incidentName" placeholder="Enter Incident Name" class ="newIncident" >
     <input type="datetime-local" name ="incidentDate" class ="newIncident" >
     </br></br></br>
+
+    <input type="text" name ="reportName" placeholder="Enter Report Name"  >
 
     <input type="text" name ="reportObj" id="form-builder-template" value="@templateObj" >
       
