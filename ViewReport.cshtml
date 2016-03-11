@@ -1,35 +1,45 @@
 ﻿@{
-    
-}
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+    var db = Database.Open("ProjectManager");
 
-<p> Select Incident </p>
-<form method="post">
-<select name="previous incidents">
-        <option value=""></option>
-        <option value="incident">Crash</option>
-        <option value="incident">Damage</option>
-        <option value="incident">Injury</option>
-</select>
+    var reportId = 14;
+
+    var templateObj = db.QueryValue("SELECT templateObj FROM Reports WHERE reportId = @0", reportId);
+    var reportObj = db.QueryValue("SELECT reportObj FROM Reports WHERE reportId = @0", reportId);
+
+
+}
+<link rel="stylesheet" type="text/css" media="screen" href="css/form-builder.css">
+
+<form id="testForm" method="post">
+
+
+    <input type="text" name ="reportObj" id="form-builder-template" value="@templateObj" >
+      
+    <input hidden  type="text" id="serializedString"  name ="hiddenSerializeString" value="@reportObj" >
 </form>
-		
-<p> Your submitted reports for chosen incident: </p>
-<form method="post">
-<select name="previous incidents">
-        <option value=""></option>
-        <option value="report">Report #001423</option>
-        <option value="report">Report #001424</option>
-        <option value="report">Report #001425</option>
-</select>
-</form>
-		
-<form action="user-create-2.html">
-	<button type="submit">View report</button>
-</form>
-						
-<form action="user-create-3.html">
-	<button type="submit">Submit new report for this incident</button>
-</form>
-			
-<form action="user.html">
-	<button type="submit">Back</button>
-</form>
+
+    
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <script src="js/form-render.js"></script>
+  <script src="js/jquery.deserialize.js"></script>
+
+    <script>
+        jQuery(document).ready(function ($) {
+            'use strict';
+            var template = document.getElementById('form-builder-template');
+            $(template).formRender();
+        
+            var serializedString = $('#serializedString').val();
+            console.log(serializedString);
+
+            $( '#testForm' ).deserialize( serializedString );
+        });
+
+    </script>

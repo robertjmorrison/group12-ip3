@@ -26,9 +26,6 @@
     long[] incidentsId = new long[incidentsNumber];
     String[] incidentsName = new String[incidentsNumber];
     
-
-
-
     var i = 0;
     foreach (var x in incidents)
     {
@@ -150,43 +147,4 @@
         });
 
 
-
-
-
-
-        // to use on view form pages
-        $.fn.deserialize = function (serializedString) {
-            var $form = $(this);
-            $form[0].reset();
-            serializedString = serializedString.replace(/\+/g, '%20');
-            var formFieldArray = serializedString.split("&");
-            $populateFeedback.slideDown().html('');
-            $.each(formFieldArray, function (i, pair) {
-                var nameValue = pair.split("=");
-                var name = decodeURIComponent(nameValue[0]);
-                var value = decodeURIComponent(nameValue[1]);
-                // Find one or more fields
-                var $field = $form.find('[name=' + name + ']');
-                console.log(name, value);
-                $populateFeedback.append('<li>' + name + ' = ' + value + '</li>');
-
-                if ($field[0].type == "radio"
-                        || $field[0].type == "checkbox") {
-                    var $fieldWithValue = $field.filter('[value="' + value + '"]');
-                    var isFound = ($fieldWithValue.length > 0);
-                    if (!isFound && value == "on") {
-                        $field.first().prop("checked", true);
-                    } else {
-                        $fieldWithValue.prop("checked", isFound);
-                    }
-                } else {
-                    $field.val(value);
-                }
-            });
-        }
-
-        $('#deserialize').click(function () {
-            // console.log("serializedString = ", serializedString, decodeURIComponent(serializedString));
-            $form.deserialize(serializedString);
-        });
     </script>
