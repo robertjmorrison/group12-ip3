@@ -1,0 +1,58 @@
+﻿@{
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+    var db = Database.Open("ProjectManager");
+
+    //Request["id"];
+
+    var templateId = 2;
+    var errorMessage = "";
+    var templateName = db.QueryValue("SELECT templateName FROM Templates WHERE templateId = @0", templateId);
+    var templateObj = db.QueryValue("SELECT templateObj FROM Templates WHERE templateId = @0", templateId);
+
+    if(IsPost)
+    {
+        if (Request["submit"] == "Save Form")
+            {
+                templateObj = Request.Unvalidated().Form["templateObj"];
+
+                db.Execute("UPDATE Templates SET templateObj = @0  WHERE templateId = @1;", templateObj, templateId );
+                errorMessage = "Template has been updated";
+
+            }
+    }
+
+}
+
+<link rel="stylesheet" type="text/css" media="screen" href="css/form-builder.css">
+
+<input hidden id="hiddenval" value = "@templateObj">
+ <form method="post">
+    <h2>Form Builder</h2></br>
+    <p>Please Enter Template Name</p>
+    <input type="text" placeholder="Template Name.." name="nameInput" value=@templateName></br></br>
+    <input type="text" name ="templateObj" id="form-builder-template">   
+    <input type="submit" name="submit" value="Save Form">
+    <input type="submit" name="submit" value="Back"></br>
+    <p>@errorMessage</p>
+ </form>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <script src="js/form-builder.js"></script>
+
+    <script>
+        jQuery(document).ready(function ($) {
+            'use strict';
+
+            var savedXML = $('#hiddenval').val();
+            console.log(savedXML);
+            $('#form-builder-template').val(savedXML)
+            $('#form-builder-template').formBuilder();
+
+        });
+    </script>
