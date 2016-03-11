@@ -1,12 +1,32 @@
 ﻿@{
-    
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+    var db = Database.Open("ProjectManager");
+
+    // Depending on which type of incident the user selects, load the appropriate incidents list 
+    // Load all reports relating to an incident in the next checkbox
+
+
 }
 
 <div>
-    <a href=''>Active Incidents</a> </br></br>
-    <a href=''>Inactive Incidents</a> </br></br>
+    
+    <form id='loginform' class="login" action="">
+    <input type="radio" name="incident" checked="checked">Active Incidents</input>
+    <input type="radio" name="incident">Inactive Incidents</input></br></br>
+
+
+    <select name="incident">
+        <option>Incident 1</option>
+    </select> </br></br>
+
+    <select name="report">
+        <option>Report 1</option>
+    </select>
+
     <br/>
-    <form action="">
-    <button type="submit">Back</button>
+    <button type="submit" value="Proceed">Modify Report</button>
     </form>
 </div>

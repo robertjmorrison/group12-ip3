@@ -54,24 +54,37 @@ div {
     border-width: 0px;
 }
 
-ul {
-    list-style: none;
+
+
+#navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #f1f1f1;
 }
 
-#navbar {
-    background-color: #B3C9E9;
-    position:absolute;
-    right:0px;
-    bottom:0px;
-    top:0px;
-    height: 100%;
-    width: 88%;
-    float: left;
+#navbar li a {
+    display: block;
+    color: #000;
+    padding: 8px 0 8px 16px;
+    text-decoration: none;
+}
+
+#navbar li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#navbar li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
 }
 
 #navbar-parent {
     position:relative;
     min-height:100%;
+    min-width: 150px;
 }
 
 #horizontal-bar {
