@@ -90,9 +90,10 @@
 }
 
 <div>
-        <input type="radio" class ="type" name="type" value="Active" checked><p>Active</p> 
-        <input type="radio" class ="type" name="type" value="Archived"><p>Archived</p> 
-    <form id="Active" method="post">
+    <h3>Please select an incident type</h3>
+        <input type="radio" class ="type" name="type" value="Active" checked><label>Active</label> </br></br>
+        <input type="radio" class ="type" name="type" value="Archived"><label>Archived</label> </br></br>
+    <form class="login" id="Active" method="post">
 
 
         <p>Please select an incident</p>
@@ -116,7 +117,7 @@
     <input type="submit" name ="submit" value="View Active Reports">
     </form>
 
-    <form id="Archived" method="post">
+    <form class="login"id="Archived" method="post">
 
         <p>Please select an incident</p>
         <select name="archivedIncident" id="archivedIncident">

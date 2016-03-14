@@ -66,7 +66,8 @@ div {
 
 #navbar li a {
     display: block;
-    color: #000;
+    color: black;
+    background-color: #CAD7EB;
     padding: 8px 0 8px 16px;
     text-decoration: none;
 }
@@ -77,7 +78,7 @@ div {
 }
 
 #navbar li a:hover:not(.active) {
-    background-color: #555;
+    background-color: #FF4612;
     color: white;
 }
 
@@ -107,7 +108,7 @@ div {
     float: left;
     width: 150%;
     line-height: 60px;
-    background-color: #808080;
+    background-color: #003056;
     border-style: dashed;
     border-width: 1px;
     text-align: center;
@@ -134,6 +135,10 @@ div {
     text-align: center;
 }
 
+#loginform li {
+    list-style: none;
+}
+
 @keyframes spinner {
   0% {
     transform: rotateZ(0deg);
@@ -154,6 +159,18 @@ div {
   background: rgba(4, 40, 68, 0.85);
 }
 
+input[type=checkbox] {
+    display: inline !important;
+    width: auto !important;
+    
+}
+
+input[type=radio] {
+    display: inline !important;
+    width: auto !important;
+    
+}
+
 .login {
   border-radius: 2px 2px 5px 5px;
   padding: 10px 20px 20px 20px;
@@ -164,10 +181,11 @@ div {
   padding-bottom: 80px;
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
   display: inline-block;
-    margin-left: 0 auto;
+  margin-left: 0 auto;
     margin-right: 0 auto;
     text-align: center;
 }
+
 .login.loading button {
   max-height: 100%;
   padding-top: 50px;
@@ -177,7 +195,7 @@ div {
   top: 40%;
 }
 .login.ok button {
-  background-color: #8bc34a;
+  background-color: #7DA4DD;
 }
 .login.ok button .spinner {
   border-radius: 0;
@@ -195,10 +213,10 @@ div {
   border: 1px solid #ddd;
   transition: border-width 0.2s ease;
   border-radius: 2px;
-  color: #ccc;
+  color: black;
 }
 .login input + i.fa {
-  color: #fff;
+  color: #7DA4DD;
   font-size: 1em;
   position: absolute;
   margin-top: -47px;
@@ -208,8 +226,8 @@ div {
 }
 .login input:focus {
   outline: none;
-  color: #444;
-  border-color: #2196F3;
+  color: #003056;
+  border-color: #7DA4DD;
   border-left-width: 35px;
 }
 .login input:focus + i.fa {
@@ -218,7 +236,6 @@ div {
   transition: all 0.25s ease-out;
 }
 .login a {
-  font-size: 0.8em;
   color: #2196F3;
   text-decoration: none;
 }
@@ -234,7 +251,7 @@ div {
   width: 100%;
   height: 100%;
   padding: 10px 10px;
-  background: #2196F3;
+  background: #7DA4DD;
   color: #fff;
   display: block;
   border: none;
