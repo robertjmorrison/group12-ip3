@@ -46,7 +46,6 @@
 
                 if (incidentId == 0)
                 {
-                    errorMessage ="error 2";
                     incidentName = Request.Form["incidentName"];
                     incidentDate = Request.Form["incidentDate"].AsDateTime();
 
@@ -56,7 +55,7 @@
                     }
 
 
-                    // If all information is valid, create a new account
+                    // If all information is valid, create a new incident
                     if (errorMessage=="")
                     {
                         var checkIncident = db.QuerySingle("SELECT incidentName FROM Incidents WHERE LOWER(incidentName) = LOWER(@0)", incidentName);
@@ -70,8 +69,17 @@
                 }
 
                 reportObj = Request.Form["hiddenSerializeString"];
+                if ( incidentName== "")
+                    {
+                        errorMessage = "You must specify all fields.";
+                    }
 
-                db.Execute("INSERT INTO Reports (reportObj, userId, incidentId, templateObj, reportName) VALUES (@0, @1, @2, @3, @4)", reportObj, userId, incidentId, templateObj, reportName);
+
+                    // If all information is valid, create a new report
+                    if (errorMessage=="")
+                    {
+                        db.Execute("INSERT INTO Reports (reportObj, userId, incidentId, templateObj, reportName) VALUES (@0, @1, @2, @3, @4)", reportObj, userId, incidentId, templateObj, reportName);
+                    }
             }
     }    
 
@@ -101,9 +109,9 @@
      
     <input type="text" name ="incidentName" placeholder="Enter Incident Name" class ="newIncident" >
     <input type="datetime-local" name ="incidentDate" class ="newIncident" >
-    </br></br></br>
+    </br></br>
 
-    <input type="text" name ="reportName" placeholder="Enter Report Name"  >
+    <input type="text" name ="reportName" placeholder="Enter Report Name"  ></br>
 
     <input type="text" name ="reportObj" id="form-builder-template" value="@templateObj" >
       
