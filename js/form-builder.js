@@ -542,28 +542,32 @@ Author: Kevin Chappell <kevin.b.chappell@gmail.com>
         className: 'radio-group',
         name: 'radio-group'
       }
-    }, {
-      label: opts.messages.hidden,
-      attrs: {
-        type: 'hidden',
-        className: 'hidden-input',
-        name: 'hidden-input'
-      }
-    }, {
-      label: opts.messages.fileUpload,
-      attrs: {
-        type: 'file',
-        className: 'file-input',
-        name: 'file-input'
-      }
-    }, {
-      label: opts.messages.dateField,
-      attrs: {
-        type: 'date',
-        className: 'calendar',
-        name: 'date-input'
-      }
-    }, {
+    },
+    // {
+    //  label: opts.messages.hidden,
+    //  attrs: {
+    //    type: 'hidden',
+    //    className: 'hidden-input',
+    //    name: 'hidden-input'
+    //  }
+    //},
+    // {
+    //  label: opts.messages.fileUpload,
+    //  attrs: {
+    //    type: 'file',
+    //    className: 'file-input',
+    //    name: 'file-input'
+    //  }
+    //}, 
+    //{
+    //  label: opts.messages.dateField,
+    //  attrs: {
+    //    type: 'date',
+    //    className: 'calendar',
+    //    name: 'date-input'
+    //  }
+    //}, 
+    {
       label: opts.messages.checkboxGroup,
       attrs: {
         type: 'checkbox-group',
@@ -584,14 +588,17 @@ Author: Kevin Chappell <kevin.b.chappell@gmail.com>
         className: 'button-input',
         name: 'button'
       }
-    }, {
-      label: opts.messages.autocomplete,
-      attrs: {
-        type: 'autocomplete',
-        className: 'autocomplete',
-        name: 'autocomplete'
-      }
-    }];
+    }
+    //, 
+    //{
+    //  label: opts.messages.autocomplete,
+    //  attrs: {
+    //    type: 'autocomplete',
+    //    className: 'autocomplete',
+    //    name: 'autocomplete'
+    //  }
+    //}
+    ];
 
     // Create draggable fields for formBuilder
     var cbUL = $('<ul/>', {
@@ -960,16 +967,16 @@ Author: Kevin Chappell <kevin.b.chappell@gmail.com>
       advFields += '<div class="frm-fld name-wrap"><label>' + opts.messages.name + ' <span class="required">*</span></label>';
       advFields += '<input type="text" name="name" value="' + values.name + '" class="fld-name form-control" id="title-' + lastID + '" /></div>';
 
-      advFields += '<div class="frm-fld access-wrap"><label>' + opts.messages.roles + '</label>';
+      //advFields += '<div class="frm-fld access-wrap"><label>' + opts.messages.roles + '</label>';
 
-      advFields += '<input type="checkbox" name="enable_roles" value="" ' + (values.role !== undefined ? 'checked' : '') + ' id="enable_roles-' + lastID + '"/> <label for="enable_roles-' + lastID + '" class="roles-label">' + opts.messages.limitRole + '</label>';
-      advFields += '<div class="frm-fld available-roles" ' + (values.role !== undefined ? 'style="display:block"' : '') + '>';
+      //advFields += '<input type="checkbox" name="enable_roles" value="" ' + (values.role !== undefined ? 'checked' : '') + ' id="enable_roles-' + lastID + '"/> <label for="enable_roles-' + lastID + '" class="roles-label">' + opts.messages.limitRole + '</label>';
+      //advFields += '<div class="frm-fld available-roles" ' + (values.role !== undefined ? 'style="display:block"' : '') + '>';
 
-      for (key in opts.roles) {
-        if ($.inArray(key, ['date', '4']) === -1) {
-          advFields += '<input type="checkbox" name="roles[]" value="' + key + '" id="fld-' + lastID + '-roles-' + key + '" ' + ($.inArray(key, roles) !== -1 ? 'checked' : '') + ' class="roles-field" /><label for="fld-' + lastID + '-roles-' + key + '">' + opts.roles[key] + '</label><br/>';
-        }
-      }
+      //for (key in opts.roles) {
+      //  if ($.inArray(key, ['date', '4']) === -1) {
+      //    advFields += '<input type="checkbox" name="roles[]" value="' + key + '" id="fld-' + lastID + '-roles-' + key + '" ' + ($.inArray(key, roles) !== -1 ? 'checked' : '') + ' class="roles-field" /><label for="fld-' + lastID + '-roles-' + key + '">' + opts.roles[key] + '</label><br/>';
+      //  }
+      //}
       advFields += '</div></div>';
 
       // if field type is not checkbox, checkbox/radio group or select list, add max length
