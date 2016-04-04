@@ -1,0 +1,95 @@
+﻿@using Microsoft.Web.Helpers;
+@{
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+
+         var addAttachment = 0;
+         var removeAttachment = 0;
+         var roleId = 0;  
+    
+         var db = Database.Open("ProjectManager");
+
+         var userId = WebSecurity.CurrentUserId;
+         var userRole = db.QueryValue("SELECT roleId FROM Users WHERE userId = @0", userId);
+         var role = db.Query("SELECT addAttach, removeAttach FROM Roles WHERE roleId = @0", userRole);
+
+         var errorMessage = "";
+
+
+     foreach (var x in role)
+        {
+             addAttachment = @x.addAttach;
+             removeAttachment = @x.removeAttach;
+        }
+
+        if(addAttachment == 0)
+        {
+            Response.Redirect("Blank.cshtml");
+        }
+
+
+        var fileName ="";
+        var fileMime = "";
+        var reportId = Request["id"];
+        
+       if (IsPost)
+        {
+            if (Request["submit"] == "No Image")
+            {
+                Response.Redirect("Blank.cshtml");
+            }
+            
+                   
+
+                var image = Request.Files[0];
+                fileName = Path.GetFileName(image.FileName);
+                if(fileName != String.Empty)
+                    {
+                        fileMime = image.ContentType;
+                        var fileStream = image.InputStream;
+                        var fileLength = image.ContentLength;
+            
+                        byte[] fileContent = new byte[fileLength];
+                        fileStream.Read(fileContent, 0, fileLength);
+
+                        if(!fileMime.StartsWith("image"))
+                        {
+                             errorMessage = "Images only";
+                        }
+
+                        if (errorMessage == "")
+                        {
+                            db.Execute("UPDATE Reports SET image = @0 WHERE reportId = @1", fileContent, reportId);
+                            errorMessage = "done";
+                        }
+                    }
+                
+
+
+
+
+        }
+     
+}
+
+<div class='row'>
+
+      <h2>Attach Image</h2>
+         
+      <form action="" id="attach image" method="post" class="login" enctype = multipart/form-data>
+                  <p>@errorMessage</p>
+      <input type="submit" name="submit" value="No Image">
+    
+        <p>Please specify an image, if required:</p></br>
+        @FileUpload.GetHtml(initialNumberOfFiles:1, allowMoreFilesToBeAdded:false,
+        includeFormTag:true, uploadText:"Attach Image")
+        
+       </br>
+
+      </form>
+
+        
+    </div>
+</div>

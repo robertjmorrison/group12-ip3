@@ -69,7 +69,7 @@
                 }
 
                 reportObj = Request.Form["hiddenSerializeString"];
-                if ( incidentName== "")
+                if ( reportName== "")
                     {
                         errorMessage = "You must specify all fields.";
                     }
@@ -79,6 +79,9 @@
                     if (errorMessage=="")
                     {
                         db.Execute("INSERT INTO Reports (reportObj, userId, incidentId, templateObj, reportName) VALUES (@0, @1, @2, @3, @4)", reportObj, userId, incidentId, templateObj, reportName);
+                        var reportId = db.QueryValue("SELECT reportId FROM Reports WHERE reportName = @0 AND userID = @1 AND reportObj = @2", reportName, userId, reportObj);
+                        Response.Redirect("AttachFile.cshtml?id="+reportId);    
+
                     }
             }
     }    
