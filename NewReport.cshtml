@@ -27,7 +27,8 @@
 
     long[] incidentsId = new long[incidentsNumber];
     String[] incidentsName = new String[incidentsNumber];
-    
+
+
     var i = 0;
     foreach (var x in incidents)
     {
@@ -61,7 +62,19 @@
                         var checkIncident = db.QuerySingle("SELECT incidentName FROM Incidents WHERE LOWER(incidentName) = LOWER(@0)", incidentName);
                         if (checkIncident == null)
                         {
-                            db.Execute("INSERT INTO Incidents (incidentName, incidentDate) VALUES (@0, @1)", incidentName, incidentDate );
+                            var incidentMgrCount = db.QueryValue("SELECT count(*) FROM Users WHERE roleId IN (SELECT roleId FROM Roles WHERE editRep = 1)");
+                            long[] incidentMgrIds = new long[incidentMgrCount];
+                            var incidentMgrs = db.Query("SELECT userId FROM Users WHERE roleId IN (SELECT roleId FROM Roles WHERE editRep = 1)");
+                            var j = 0;
+                            foreach (var x in incidentMgrs)
+                            {
+                                  incidentMgrIds[j] = @x.userId;
+                                  j++;
+                            }
+                            var groups = incidentMgrIds.GroupBy(x => x);
+                            var leastCommon = groups.OrderByDescending(x => x.Count()).Last();
+                            var incidentOwner = leastCommon.Key;
+                            db.Execute("INSERT INTO Incidents (incidentName, incidentDate, incidentOwner) VALUES (@0, @1, @2)", incidentName, incidentDate, incidentOwner );
 
                             incidentId = db.QueryValue("SELECT incidentId FROM Incidents WHERE incidentName = @0", incidentName); 
                         }
