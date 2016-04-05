@@ -22,6 +22,22 @@
           incidentsName[i] = @x.incidentName;
           i++;
     }
+
+    //Archived incidents form dropdown population
+    var archivedIncidentId = 0;
+    var archivedIncidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Archived' ");
+    var archivedIncidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Archived'");
+    
+    long[] archivedIncidentsId = new long[archivedIncidentsNumber];
+    String[] archivedIncidentsName = new String[archivedIncidentsNumber];
+    
+    i = 0;
+    foreach (var x in archivedIncidents)
+    {
+          archivedIncidentsId[i] = @x.incidentId;
+          archivedIncidentsName[i] = @x.incidentName;
+          i++;
+    }
          
       if(IsPost)
     {
@@ -31,9 +47,18 @@
             db.Execute("UPDATE Incidents SET status = 'Archived' WHERE incidentId=@0", incidentId);
             errorMessage = "Incident Archived.";
         }
+
+        if (Request["submit"] == "Re-open Incident")   
+        {
+            archivedIncidentId = Request.Form["archivedIncident"].AsInt();
+            db.Execute("UPDATE Incidents SET status = 'Active' WHERE incidentId=@0", archivedIncidentId);
+            errorMessage = "Incident Re-opened.";
+        }
     }
 }     
-
+    <h3>Please select an incident type</h3>
+        <input type="radio" class ="type" name="type" value="Active" checked><label>Active</label> </br></br>
+        <input type="radio" class ="type" name="type" value="Archived"><label>Archived</label> </br></br>
  <form class="login" id="Active" method="post">
 
 
@@ -57,4 +82,47 @@
     </br></br>
     <button type="submit" name ="submit" value="Archive Incident">Archive Incident</button>
      @errorMessage
-    </form>
+</form>
+
+ <form class="login" id="Archived" method="post">
+
+
+        <p>Please select an incident</p>
+        <select name="archivedIncident"  id="incident" >
+        
+        @for(int x=0; x<archivedIncidentsNumber; x++)
+        {
+            if (@archivedIncidentsId[x] == @archivedIncidentId)
+            {
+                <option selected value=@archivedIncidentsId[x] >@archivedIncidentsName[x]</option>
+            }   
+            else
+            {
+                <option value=@archivedIncidentsId[x] >@archivedIncidentsName[x]</option>
+            }
+   
+        }
+    </select>
+
+    </br></br>
+    <button type="submit" name ="submit" value="Archive Incident">Archive Incident</button>
+     @errorMessage
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#Archived').hide();
+
+        $('.type').change(function () {
+
+            if (this.value == 'Active') {
+                $('#Archived').toggle();
+                $('#Active').toggle();
+            }
+            else if (this.value == 'Archived') {
+                $('#Archived').toggle();
+                $('#Active').toggle();
+            }
+        });
+    });
+</script>
