@@ -1,0 +1,60 @@
+﻿@{
+    if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
+    var db = Database.Open("ProjectManager");
+
+    var errorMessage = "";
+
+    //incidents form dropdown population
+    var incidentId = 0;
+    var incidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Active' ");
+    var incidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Active'");
+    
+    long[] incidentsId = new long[incidentsNumber];
+    String[] incidentsName = new String[incidentsNumber];
+    
+    var i = 0;
+    foreach (var x in incidents)
+    {
+          incidentsId[i] = @x.incidentId;
+          incidentsName[i] = @x.incidentName;
+          i++;
+    }
+         
+      if(IsPost)
+    {
+        if (Request["submit"] == "Archive Incident")   
+        {
+            incidentId = Request.Form["incident"].AsInt();
+            db.Execute("UPDATE Incidents SET status = 'Archived' WHERE incidentId=@0", incidentId);
+            errorMessage = "Incident Archived.";
+        }
+    }
+}     
+
+ <form class="login" id="Active" method="post">
+
+
+        <p>Please select an incident</p>
+        <select name="incident"  id="incident" >
+        
+        @for(int x=0; x<incidentsNumber; x++)
+        {
+            if (@incidentsId[x] == @incidentId)
+            {
+                <option selected value=@incidentsId[x] >@incidentsName[x]</option>
+            }   
+            else
+            {
+                <option value=@incidentsId[x] >@incidentsName[x]</option>
+            }
+   
+        }
+    </select>
+
+    </br></br>
+    <button type="submit" name ="submit" value="Archive Incident">Archive Incident</button>
+     @errorMessage
+    </form>
