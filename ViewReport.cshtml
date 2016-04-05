@@ -9,7 +9,7 @@
 
     var templateObj = db.QueryValue("SELECT templateObj FROM Reports WHERE reportId = @0", reportId);
     var reportObj = db.QueryValue("SELECT reportObj FROM Reports WHERE reportId = @0", reportId);
-
+    var image = db.QueryValue("SELECT image FROM Reports WHERE reportId= @0", reportId);
 
 }
 <link rel="stylesheet" type="text/css" media="screen" href="css/form-builder.css">
@@ -20,6 +20,14 @@
     <input type="text" name ="reportObj" id="form-builder-template" value="@templateObj" >
       
     <input hidden  type="text" id="serializedString"  name ="hiddenSerializeString" value="@reportObj" >
+
+    @if(!(System.Convert.IsDBNull(image)))
+    {
+        @:<img src="data:image;base64,@System.Convert.ToBase64String((byte[])image)" alt="image" />
+        
+    }
+
+
 </form>
 
     
