@@ -10,7 +10,18 @@
     var templateObj = db.QueryValue("SELECT templateObj FROM Reports WHERE reportId = @0", reportId);
     var reportObj = db.QueryValue("SELECT reportObj FROM Reports WHERE reportId = @0", reportId);
     var image = db.QueryValue("SELECT image FROM Reports WHERE reportId= @0", reportId);
+    var userId = WebSecurity.CurrentUserId;
+    var userRole = db.QueryValue("SELECT roleId FROM Users WHERE userId = @0", userId);
+    var removeAttachment = db.QueryValue("SELECT removeAttach FROM Roles WHERE roleId = @0", userRole);
 
+    if(IsPost)
+    {
+        if (Request["submit"] == "Remove Attachment")   
+        {
+            db.Execute("UPDATE Reports SET image = null WHERE reportId=@0", reportId);
+            image = null;
+        }
+    }
 }
 <link rel="stylesheet" type="text/css" media="screen" href="css/form-builder.css">
 
@@ -21,9 +32,14 @@
       
     <input hidden  type="text" id="serializedString"  name ="hiddenSerializeString" value="@reportObj" >
 
-    @if(!(System.Convert.IsDBNull(image)))
+    @if(!(System.Convert.IsDBNull(image)) || image == null)
     {
         @:<img src="data:image;base64,@System.Convert.ToBase64String((byte[])image)" alt="image" />
+
+        if(removeAttachment == 1)
+        {
+           @:</br>  <input type="submit" name ="submit" value="Remove Attachment">
+        }
         
     }
 

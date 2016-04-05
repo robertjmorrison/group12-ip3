@@ -36,8 +36,8 @@
     var j = 0;
     foreach (var x in archivedIncidents)
     {
-          incidentsId[j] = @x.incidentId;
-          incidentsName[j] = @x.incidentName;
+          archivedIncidentsId[j] = @x.incidentId;
+          archivedIncidentsName[j] = @x.incidentName;
           j++;
     }
 
@@ -45,6 +45,9 @@
     var reportsNumber = 0;
     long[] reportsId = new long[reportsNumber];
     String[] reportsName = new String[reportsNumber];
+    var userId = WebSecurity.CurrentUserId;
+    var userRole = db.QueryValue("SELECT roleId FROM Users WHERE userId = @0", userId);
+    var editRep = db.QueryValue("SELECT editRep FROM Roles WHERE roleId = @0", userRole);
 
     if (IsPost)
     {
@@ -54,9 +57,18 @@
         if (Request["submit"] == "View Active Reports")
             {
                 incidentId = Request.Form["incident"].AsInt();
-                var reports = db.Query("SELECT reportName, reportId FROM Reports WHERE incidentId=@0 ", incidentId);
+                IEnumerable<dynamic> reports = null;
+                if(editRep == 1)
+                {
+                    reports = db.Query("SELECT reportName, reportId FROM Reports WHERE incidentId=@0 ", incidentId);
+                    reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0", incidentId);
+                }
+                else
+                {
+                    reports = db.Query("SELECT reportName, reportId FROM Reports WHERE incidentId=@0 AND userId = @1", incidentId, userId);
+                    reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0 AND userId =@1", incidentId, userId);
+                }
 
-                reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0", incidentId);
                 Array.Resize(ref reportsId, reportsNumber);
                 Array.Resize(ref reportsName, reportsNumber);
                 var f = 0;
@@ -70,12 +82,22 @@
 
         if (Request["submit"] == "View Archived Reports")
             {
-                incidentId = Request.Form["archivedIncident"].AsInt();
+                archivedIncidentId = Request.Form["archivedIncident"].AsInt();
+                IEnumerable<dynamic> reports = null;
+                if(editRep == 1)
+                {
+                    reports = db.Query("SELECT reportName, reportId FROM Reports WHERE incidentId=@0 ", archivedIncidentId);
+                    reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0", archivedIncidentId);
+                }
+                else
+                {
+                    reports = db.Query("SELECT reportName, reportId FROM Reports WHERE incidentId=@0 AND userId = @1", archivedIncidentId, userId);
+                    reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0 AND userId = @1", archivedIncidentId, userId);   
+                }
 
-                reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0", incidentId);
                 Array.Resize(ref reportsId, reportsNumber);
                 Array.Resize(ref reportsName, reportsNumber);
-                var reports = db.Query("SELECT reportName, reportId FROM Reports WHERE incidentId=@0 ", archivedIncidentId);
+
                 var f = 0;
                 foreach (var x in reports)
                 {

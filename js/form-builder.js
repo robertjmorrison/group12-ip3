@@ -581,14 +581,15 @@ Author: Kevin Chappell <kevin.b.chappell@gmail.com>
         className: 'checkbox',
         name: 'checkbox'
       }
-    }, {
-      label: opts.messages.button,
-      attrs: {
-        type: 'button',
-        className: 'button-input',
-        name: 'button'
-      }
     }
+    //, {
+    //  label: opts.messages.button,
+    //  attrs: {
+    //    type: 'button',
+    //    className: 'button-input',
+    //    name: 'button'
+    //  }
+    //}
     //, 
     //{
     //  label: opts.messages.autocomplete,
