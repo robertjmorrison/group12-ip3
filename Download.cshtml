@@ -1,9 +1,0 @@
-﻿@{
-        var db = Database.Open("ProjectManager");
-        int id = 0;
-        id = Request["Id"].AsInt();
-        var file = db.QuerySingle("SELECT image FROM Reports WHERE reportId= @0", id);
-        
-        Response.BinaryWrite((byte[])file.FileContent);
-    }
-}
