@@ -26,12 +26,12 @@
 }
 
 <div>
-    <form action="">
-        <p>Please select the type of report you wish to submit</p>
+    <form action="" class="login">
+        <p class="title">Please select the type of report you wish to submit</p>
         <ul>
        @for(int x=0; x<@templatesNumber; x++)
             {
-               <li><a href="NewReport.cshtml?id=@templatesId[x]"><p>@templatesName[x]</p></a></li>
+               <li><a href="NewReport.cshtml?id=@templatesId[x]">@templatesName[x]</a></li>
             }
         </ul>
 

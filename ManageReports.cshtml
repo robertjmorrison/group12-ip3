@@ -143,7 +143,7 @@
     <form class="login" id="Active" method="post">
 
 
-        <p>Please select an incident</p>
+        <p class="title">Please select an incident</p>
         <select name="incident"  id="incident" >
         
         @for(int x=0; x<incidentsNumber; x++)
@@ -161,12 +161,12 @@
     </select>
 
     </br></br>
-    <input type="submit" name ="submit" value="View Active Reports">
+    <button type="submit" name ="submit" value="View Active Reports">View Active Reports</button>
     </form>
 
     <form class="login"id="Archived" method="post">
 
-        <p>Please select an incident</p>
+        <p class="title">Please select an incident</p>
         <select name="archivedIncident" id="archivedIncident">
         
         @for(int x=0; x<archivedIncidentsNumber; x++)
@@ -184,7 +184,7 @@
     </select>
 
     </br></br>
-    <input type="submit" name ="submit" value="View Archived Reports">
+    <button type="submit" name ="submit" value="View Archived Reports">View Archived Reports</button>
     </form>
     </br></br>
     <ul>

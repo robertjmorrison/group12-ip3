@@ -1,5 +1,8 @@
 ﻿@{
-    
+     if(!WebSecurity.IsAuthenticated)
+     {
+       Response.Redirect("Index.cshtml");    
+     }
 }
 
 <div>

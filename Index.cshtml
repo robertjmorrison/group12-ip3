@@ -2,9 +2,8 @@
     var userNameLogIn = "";
     var passwordLogIn = "";
 
-
-
     var loginErrorMessage = "";
+    var db = Database.Open("ProjectManager");
 
 if(IsPost)
 {
@@ -16,8 +15,13 @@ if(IsPost)
 
              if (WebSecurity.UserExists(userNameLogIn))
                 {
-                    WebSecurity.Login(userNameLogIn, passwordLogIn, true);
-                    Response.Redirect("Blank.cshtml");
+                    WebSecurity.Login(userNameLogIn, passwordLogIn, false);
+                    db.Execute("UPDATE Users SET lastLoginDate = GETDATE() WHERE userId = @0", WebSecurity.CurrentUserId);
+                    if(WebSecurity.IsAuthenticated)
+                    {
+                        Response.Redirect("Blank.cshtml");   
+                    }
+
                 }
              else
                 {
@@ -40,7 +44,7 @@ if(IsPost)
 
          @if(WebSecurity.IsAuthenticated)
  {
-     @:<form id="loginform" name="login" action="" method="post" accept-charset="utf-8">
+     @:<form id="loginform" name="login" action="" method="post" accept-charset="utf-8" class="login">
          <input type="submit" name="submit" value="log out" />
     @:</form>
 
@@ -52,14 +56,11 @@ if(IsPost)
 
   @:<form id="loginform" name="login" action="" method="post" accept-charset="utf-8" class="login">
     <p class="title">Log in</p>
-    @:<input type="text" name='username'placeholder="Username"/>
-    <i class="fa fa-user"></i>
-    @:<input type="password" name="password" placeholder="Password" />
-    <i class="fa fa-key"></i>
+    @:<input type="text" name='username'placeholder="Username"/>   
+    @:<input type="password" name="password" placeholder="Password" />    
     <a href="#">Forgot your password?</a>
     <button type="submit" name="submit" value="log in">
-    <i class="spinner"></i>
-    <span class="state">Log in</span>
+    Log in
     </button>
     @:</form>
  

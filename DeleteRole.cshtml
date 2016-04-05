@@ -52,14 +52,15 @@
     <h2>Delete Role</h2>
        
     <form id='loginform' class='login' method="post">
+        <p class="title">Please select a role to delete.</p>
         <select name="role">
             @for(int x=0; x<rolesNumber; x++)
             {
                     <option value=@rolesId[x]>@rolesName[x]</option> 
             }
-        </select><br/><br/>
+        </select>
         <p>@errorMessage</p>
-        </br></br>
+        </br>
 		
         <button type="submit" name="submit" value="Delete Role">Delete Role</button>	
     </form>
