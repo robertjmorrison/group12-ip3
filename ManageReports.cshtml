@@ -5,12 +5,26 @@
      }
     var db = Database.Open("ProjectManager");
 
-
+    var userId = WebSecurity.CurrentUserId;
+    var userRole = db.QueryValue("SELECT roleId FROM Users WHERE userId = @0", userId);
+    var editRep = db.QueryValue("SELECT editRep FROM Roles WHERE roleId = @0", userRole);
 
     //active incidents form dropdown population
     var incidentId = 0;
-    var incidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Active' ");
-    var incidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Active'");
+
+    IEnumerable<dynamic> incidents = null;
+    int incidentsNumber = 0;
+    if(editRep == 1)
+    {
+        incidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Active' AND incidentOwner = @0 OR status='Active' AND incidentCreator = @0", userId);
+        incidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Active' AND incidentOwner = @0 OR status='Active' AND incidentCreator = @0", userId);
+    }
+    else
+    {
+        incidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Active' AND incidentCreator = @0", userId);
+        incidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Active' AND incidentCreator = @0", userId);
+    }
+    
 
     long[] incidentsId = new long[incidentsNumber];
     String[] incidentsName = new String[incidentsNumber];
@@ -27,8 +41,21 @@
 
     //archived incidents form dropdown population
     var archivedIncidentId = 0;
-    var archivedIncidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Archived' ");
-    var archivedIncidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Archived'");
+
+    IEnumerable<dynamic> archivedIncidents = null;
+    int archivedIncidentsNumber = 0;
+    if(editRep == 1)
+    {
+        archivedIncidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Archived' AND incidentOwner = @0 OR status='Archived' AND incidentCreator = @0", userId);
+        archivedIncidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Archived'  AND incidentOwner = @0 OR status='Archived' AND incidentCreator = @0", userId);
+    }
+    else
+    {
+        archivedIncidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Archived' AND incidentCreator = @0", userId);
+        archivedIncidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Archived' AND incidentCreator = @0", userId);
+    }
+
+
 
     long[] archivedIncidentsId = new long[archivedIncidentsNumber];
     String[] archivedIncidentsName = new String[archivedIncidentsNumber];
@@ -45,9 +72,7 @@
     var reportsNumber = 0;
     long[] reportsId = new long[reportsNumber];
     String[] reportsName = new String[reportsNumber];
-    var userId = WebSecurity.CurrentUserId;
-    var userRole = db.QueryValue("SELECT roleId FROM Users WHERE userId = @0", userId);
-    var editRep = db.QueryValue("SELECT editRep FROM Roles WHERE roleId = @0", userRole);
+
 
     if (IsPost)
     {
