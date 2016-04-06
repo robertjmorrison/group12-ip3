@@ -4,7 +4,8 @@
 
     var loginErrorMessage = "";
     var db = Database.Open("ProjectManager");
-
+    var userId =0;
+    bool isLogged =false;
 if(IsPost)
 {
        if (Request["submit"] == "log in")
@@ -15,10 +16,16 @@ if(IsPost)
 
              if (WebSecurity.UserExists(userNameLogIn))
                 {
-                    WebSecurity.Login(userNameLogIn, passwordLogIn, false);
-                    db.Execute("UPDATE Users SET lastLoginDate = GETDATE() WHERE userId = @0", WebSecurity.CurrentUserId);
-                    if(WebSecurity.IsAuthenticated)
+
+                    isLogged = WebSecurity.Login(userNameLogIn, passwordLogIn, false);
+                    userId = WebSecurity.GetUserId(userNameLogIn);
+                    if (isLogged == true) 
                     {
+                        int rows = db.Execute("UPDATE Users SET lastLoginDate = GETDATE() WHERE userId = @0", userId);
+                        while (rows == 0)
+                        {
+                            rows = db.Execute("UPDATE Users SET lastLoginDate = GETDATE() WHERE userId = @0", userId);
+                        }
                         Response.Redirect("Blank.cshtml");   
                     }
 
@@ -63,8 +70,8 @@ if(IsPost)
     Log in
     </button>
     @:</form>
- 
-    
+ @userId
+ @isLogged   
 
     }
          </div>
