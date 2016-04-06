@@ -10,10 +10,12 @@
     var templateObj = db.QueryValue("SELECT templateObj FROM Reports WHERE reportId = @0", reportId);
     var reportObj = db.QueryValue("SELECT reportObj FROM Reports WHERE reportId = @0", reportId);
     var image = db.QueryValue("SELECT image FROM Reports WHERE reportId= @0", reportId);
+    var reportName = db.QueryValue("SELECT reportName FROM Reports WHERE reportId= @0", reportId);
     var userId = WebSecurity.CurrentUserId;
     var userRole = db.QueryValue("SELECT roleId FROM Users WHERE userId = @0", userId);
     var removeAttachment = db.QueryValue("SELECT removeAttach FROM Roles WHERE roleId = @0", userRole);
-
+    var statusRep = db.QueryValue("SELECT statusRep FROM Roles WHERE roleId = @0", userRole);
+    var reportStatus = db.QueryValue("SELECT reportStatus FROM Reports WHERE reportId = @0", reportId);
     if(IsPost)
     {
         if (Request["submit"] == "Remove Attachment")   
@@ -21,13 +23,19 @@
             db.Execute("UPDATE Reports SET image = null WHERE reportId=@0", reportId);
             image = null;
         }
+
+        if (Request["submit"] == "Sign off")   
+        {
+            db.Execute("UPDATE Reports SET reportStatus = 'SignedOff' WHERE reportId=@0", reportId);
+        }
     }
 }
 <link rel="stylesheet" type="text/css" media="screen" href="css/form-builder.css">
 
 <form id="testForm" method="post">
 
-
+    <h2>@reportName</h2>
+    </br>
     <input type="text" name ="reportObj" id="form-builder-template" value="@templateObj" >
       
     <input hidden  type="text" id="serializedString"  name ="hiddenSerializeString" value="@reportObj" >
@@ -42,7 +50,10 @@
         }
         
     }
-
+    @if(statusRep == 1 && reportStatus == "Pending")
+    {
+           @:</br><input type="submit" name="submit" value="Sign off"> 
+    }
 
 </form>
 
