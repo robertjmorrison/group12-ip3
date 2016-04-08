@@ -46,22 +46,54 @@
         incidentsName[j] = db.QueryValue("SELECT incidentName FROM Incidents WHERE incidentId = @0", incidentsId[j]);
     }
 
+    
+
+    var comments = db.Query("SELECT commentId, comment, incidentId FROM InfoRequests WHERE userId = @0 AND status = 'unacknowledged'", userId);
+    var commentsCount = db.QueryValue("SELECT COUNT(*) FROM InfoRequests WHERE userId = @0 AND status = 'unacknowledged'", userId);
+    String[] commentsList = new String[commentsCount];
+    long[] commentIds = new long[commentsCount];
+    long[] incidentCommentIds = new long[commentsCount];
+    String[] incidentCommentName = new String[commentsCount];
+
+
+
+    var k = 0;
+    foreach(var x in comments)
+    {
+        commentsList[k] = @x.comment;
+        commentIds[k] = @x.commentId;
+        incidentCommentIds[k] = @x.incidentId;
+        k++;
+    }
+        for(int l=0; l<incidentCommentIds.Length; l++)
+    {
+        incidentCommentName[l] = db.QueryValue("SELECT incidentName FROM Incidents WHERE incidentId = @0", incidentCommentIds[l]);
+    }
 }
 
 <div>
 <h2>Welcome Back</h2>
-    <form class="login">
+    <form class="login" >
 
-        <p class="title"> The following reports have been submitted since your last login and may require your attention</p>
-      <ul>
+    <p class="title"> The following reports have been submitted since your last login and may require your attention</p>
+    <ul>
 
       @for(int x=0; x<@reportsNumber; x++)
             {
                <li><a href="ViewReport.cshtml?id=@reportsId[x]"><p>@reportsName[x] submitted to the @incidentsName[x] Incident</p></a></li>
             }
     </ul>
-    
-    
-    
+    </form>
+
+    <form class="login" >
+    <p class="title"> The following requests have been submitted and may require your attention</p>
+    <ul >
+
+      @for(int x=0; x<@commentsCount; x++)
+            {
+               @:<li><p>@commentsList[x] submitted to the @incidentCommentName[x] Incident</p> <a href="Acknowledge.cshtml?id=@commentIds[x]"><p>Acknowledge</p></br></a> </li>
+               
+            }
+    </ul>
     </form>
 </div>

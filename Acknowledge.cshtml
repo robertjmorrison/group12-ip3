@@ -1,0 +1,12 @@
+﻿@{
+    var db = Database.Open("ProjectManager");
+    var id = Request["id"];
+
+    int successful = db.Execute("UPDATE InfoRequests SET status = 'Acknowledged' WHERE commentId=@0", id);
+
+    if (successful == 1)
+    {
+        Response.Redirect("Blank.cshtml");
+    }
+      
+}

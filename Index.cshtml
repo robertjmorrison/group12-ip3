@@ -21,7 +21,7 @@ if(IsPost)
                     userId = WebSecurity.GetUserId(userNameLogIn);
                     if (isLogged == true) 
                     {
-                        int rows = db.Execute("UPDATE Users SET lastLoginDate = GETDATE() WHERE userId = @0", userId);
+                        db.Execute("UPDATE Users SET lastLoginDate = GETDATE() WHERE userId = @0", userId);
 
                         Response.Redirect("Blank.cshtml");   
                     }

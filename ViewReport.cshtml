@@ -6,7 +6,7 @@
     var db = Database.Open("ProjectManager");
 
     var reportId = Request["id"];
-
+    var userReportId = db.QueryValue("SELECT userId FROM Reports WHERE reportId = @0", reportId);
     var templateObj = db.QueryValue("SELECT templateObj FROM Reports WHERE reportId = @0", reportId);
     var reportObj = db.QueryValue("SELECT reportObj FROM Reports WHERE reportId = @0", reportId);
     var image = db.QueryValue("SELECT image FROM Reports WHERE reportId= @0", reportId);
@@ -16,6 +16,8 @@
     var removeAttachment = db.QueryValue("SELECT removeAttach FROM Roles WHERE roleId = @0", userRole);
     var statusRep = db.QueryValue("SELECT statusRep FROM Roles WHERE roleId = @0", userRole);
     var reportStatus = db.QueryValue("SELECT reportStatus FROM Reports WHERE reportId = @0", reportId);
+    var incidentId = db.QueryValue("SELECT incidentId FROM Reports WHERE reportId = @0", reportId);
+
     if(IsPost)
     {
         if (Request["submit"] == "Remove Attachment")   
@@ -27,6 +29,11 @@
         if (Request["submit"] == "Sign off")   
         {
             db.Execute("UPDATE Reports SET reportStatus = 'SignedOff' WHERE reportId=@0", reportId);
+        }
+
+        if (Request["submit"] == "Request Additional Information")
+        {
+            Response.Redirect("AdditionalInfoRequest.cshtml?id="+userReportId+"&incidentId="+incidentId);
         }
     }
 }
@@ -50,6 +57,12 @@
         }
         
     }
+
+    @if(statusRep == 1)
+    {
+           @:</br><input type="submit" name="submit" value="Request Additional Information"> 
+    }
+
     @if(statusRep == 1 && reportStatus == "Pending")
     {
            @:</br><input type="submit" name="submit" value="Sign off"> 

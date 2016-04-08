@@ -1,0 +1,28 @@
+﻿@{
+ if(!WebSecurity.IsAuthenticated)
+    {
+       Response.Redirect("Index.cshtml");    
+    }
+    var db = Database.Open("ProjectManager");    
+    var userReportId = Request["id"];
+    var incidentId = Request["incidentId"];
+    var comment = Request.Form["comment"];
+
+
+    if(IsPost)
+    {
+        if (Request["submit"] == "Submit")
+        {
+            db.Execute("INSERT INTO InfoRequests (userId, comment, incidentId) VALUES (@0, @1, @2)",userReportId, comment, incidentId);
+        }
+    }
+}
+
+  
+<form  method="post" class="login">
+
+    <textarea name="comment" placeholder="Type your comment here (255 chars or less)..." style="width: 100%; height: 100px" maxlength="200"></textarea>
+    <input type="submit" name="submit" value="Submit">
+
+</form>
+
