@@ -62,7 +62,7 @@
                         if (errorMessage == "")
                         {
                             db.Execute("UPDATE Reports SET image = @0 WHERE reportId = @1", fileContent, reportId);
-                            errorMessage = "done";
+                            errorMessage = "Image attached successfully";
                         }
                     }
                 

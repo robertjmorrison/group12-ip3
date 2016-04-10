@@ -67,7 +67,15 @@
                 lastName = Request.Form["lastName"];
                 email = Request.Form["email"];
                 roleId = Request.Form["role"].AsInt();
+                if ( firstName== "" || lastName== "" || userName== "" || email== "" )
+                {
+                    errorMessage = "You must specify all fields.";
+                }
 
+
+                // If all information is valid, create a new account
+                if (errorMessage=="")
+                {
                 db.Execute("UPDATE Users SET fName = @0, lName = @1, email= @2, roleId= @3 WHERE userName = @4;", firstName, lastName, email, roleId, userName);
 
                 successMessage = "Changes Saved.";
@@ -77,7 +85,7 @@
                 lastName = "";
                 email = "";
                 roleId = 0;
-
+                }
             }
     }
 

@@ -7,7 +7,7 @@
     
     var errorMessage = "";
     var successMessage = "";
-
+    var archiveErrorMessage = "";
         
     var userName = "";
     var firstName = "";
@@ -32,7 +32,7 @@
                               lastName = @x.lName;
                         }
 
-                     errorMessage = "Do you want to archive " + userName + "?";
+                     errorMessage = "Are you sure you want to archive " + userName + "?";
                 }
                 else
                 {
@@ -43,7 +43,15 @@
 
             if (Request["submit"] == "Archive")
             {
+                 if ( userName== "" || errorMessage == "Invalid User Name")
+                {
+                    archiveErrorMessage = "You must specify a valid user.";
+                }
 
+
+                // If all information is valid, create a new account
+                if (archiveErrorMessage=="")
+                {
                 userName = Request.Form["searchInput"];
 
                 db.Execute("UPDATE Users SET status = 'Archived' WHERE userName = @0;", userName );
@@ -53,7 +61,7 @@
                 userName = "";
                 firstName =  "";
                 lastName = "";
-
+                }
             }
     }
 
@@ -71,6 +79,7 @@
         <button type="submit" name="submit" value="Archive">Archive</button>
 
         </br></br>
+        <p>@archiveErrorMessage</p>
         <p>@successMessage</p>
     </form>
 </div>

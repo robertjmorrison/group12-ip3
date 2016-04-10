@@ -17,7 +17,7 @@
     var statusRep = db.QueryValue("SELECT statusRep FROM Roles WHERE roleId = @0", userRole);
     var reportStatus = db.QueryValue("SELECT reportStatus FROM Reports WHERE reportId = @0", reportId);
     var incidentId = db.QueryValue("SELECT incidentId FROM Reports WHERE reportId = @0", reportId);
-
+    var successMessage = "";
     if(IsPost)
     {
         if (Request["submit"] == "Remove Attachment")   
@@ -29,6 +29,7 @@
         if (Request["submit"] == "Sign off")   
         {
             db.Execute("UPDATE Reports SET reportStatus = 'SignedOff' WHERE reportId=@0", reportId);
+            successMessage="Report sign-off successful.";
         }
 
         if (Request["submit"] == "Request Additional Information")
@@ -67,7 +68,7 @@
     {
            @:</br><input type="submit" name="submit" value="Sign off"> 
     }
-
+    <p>@successMessage</p>
 </form>
 
     

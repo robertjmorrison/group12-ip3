@@ -7,13 +7,25 @@
     var userReportId = Request["id"];
     var incidentId = Request["incidentId"];
     var comment = Request.Form["comment"];
-
+    var successMessage = "";
+    var errorMessage = "";
 
     if(IsPost)
     {
         if (Request["submit"] == "Submit")
         {
-            db.Execute("INSERT INTO InfoRequests (userId, comment, incidentId) VALUES (@0, @1, @2)",userReportId, comment, incidentId);
+            if ( comment== "")
+            {
+                errorMessage = "You must enter a comment to submit.";
+            }
+
+
+            // If all information is valid, create a new account
+            if (errorMessage=="")
+            {
+                db.Execute("INSERT INTO InfoRequests (userId, comment, incidentId) VALUES (@0, @1, @2)",userReportId, comment, incidentId);
+                successMessage = "Comment Submitted.";
+            }
         }
     }
 }
@@ -22,7 +34,8 @@
 <form  method="post" class="login">
 
     <textarea name="comment" placeholder="Type your comment here (255 chars or less)..." style="width: 100%; height: 100px" maxlength="200"></textarea>
+    <p>@errorMessage</p>
     <input type="submit" name="submit" value="Submit">
-
+    <p>@successMessage</p>
 </form>
 
