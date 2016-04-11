@@ -7,6 +7,8 @@
 
     var reportId = Request["id"];
     var userReportId = db.QueryValue("SELECT userId FROM Reports WHERE reportId = @0", reportId);
+    var reportUsername = db.QueryValue("SELECT userName FROM Users WHERE userId =@0", userReportId);
+    var reportPostDate = db.QueryValue("SELECT reportPostTime FROM Reports WHERE reportId = @0", reportId);
     var templateObj = db.QueryValue("SELECT templateObj FROM Reports WHERE reportId = @0", reportId);
     var reportObj = db.QueryValue("SELECT reportObj FROM Reports WHERE reportId = @0", reportId);
     var image = db.QueryValue("SELECT image FROM Reports WHERE reportId= @0", reportId);
@@ -14,10 +16,12 @@
     var userId = WebSecurity.CurrentUserId;
     var userRole = db.QueryValue("SELECT roleId FROM Users WHERE userId = @0", userId);
     var removeAttachment = db.QueryValue("SELECT removeAttach FROM Roles WHERE roleId = @0", userRole);
+    var deleteRep = db.QueryValue("SELECT closeRep FROM Roles WHERE roleId = @0", userRole);
     var statusRep = db.QueryValue("SELECT statusRep FROM Roles WHERE roleId = @0", userRole);
     var reportStatus = db.QueryValue("SELECT reportStatus FROM Reports WHERE reportId = @0", reportId);
     var incidentId = db.QueryValue("SELECT incidentId FROM Reports WHERE reportId = @0", reportId);
     var successMessage = "";
+    var deleteConfirm = 0;
     if(IsPost)
     {
         if (Request["submit"] == "Remove Attachment")   
@@ -32,9 +36,26 @@
             successMessage="Report sign-off successful.";
         }
 
+        if (Request["submit"] == "Register investigation")   
+        {
+            db.Execute("UPDATE Reports SET reportStatus = 'Investigation' WHERE reportId=@0", reportId);
+            successMessage="Report now under investigation.";
+        }
+
         if (Request["submit"] == "Request Additional Information")
         {
             Response.Redirect("AdditionalInfoRequest.cshtml?id="+userReportId+"&incidentId="+incidentId);
+        }
+
+        if (Request["submit"] == "Delete Report")
+        {
+            deleteConfirm = 1;
+        }
+
+        if (Request["submit"] == "Confirm Deletion")
+        {
+           db.Execute("DELETE FROM Reports WHERE reportId = @0", reportId);
+           Response.Redirect("ManageReports.cshtml");
         }
     }
 }
@@ -42,7 +63,9 @@
 
 <form id="testForm" method="post">
 
-    <h2>@reportName</h2>
+    <h2>@reportName</h2></br>
+    <h3>Report submitted by : @reportUsername</h3>
+    <h3>Report posted at: @reportPostDate</h3>
     </br>
     <input type="text" name ="reportObj" id="form-builder-template" value="@templateObj" >
       
@@ -64,9 +87,23 @@
            @:</br><input type="submit" name="submit" value="Request Additional Information"> 
     }
 
-    @if(statusRep == 1 && reportStatus == "Pending")
+    @if(statusRep == 1 && reportStatus == "Pending" || statusRep == 1 && reportStatus == "Investigation")
     {
            @:</br><input type="submit" name="submit" value="Sign off"> 
+    }
+    @if(deleteRep == 1)
+    {
+           @:</br><input type="submit" name="submit" value="Delete Report"> 
+            if(deleteConfirm ==1)
+            {
+               @:</br><p>Are you sure you wish to permenantly delete this report?</p> 
+               @:</br><input type="submit" name="submit" value="Confirm Deletion">  
+            }
+
+    }
+    @if(statusRep == 1 && reportStatus == "Pending")
+    {
+           @:</br><input type="submit" name="submit" value="Register investigation"> 
     }
     <p>@successMessage</p>
 </form>

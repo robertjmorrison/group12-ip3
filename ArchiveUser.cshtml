@@ -10,8 +10,8 @@
     var archiveErrorMessage = "";
         
     var userName = "";
-    var firstName = "";
-    var lastName = "";
+    long userId = 0;
+    var activeReportsCount =0;
 
     if(IsPost)
     {   
@@ -20,17 +20,10 @@
             {
                 userName = Request.Form["searchInput"];
 
-                var user = db.Query("SELECT  fName, lName FROM Users WHERE userName = @0 ", userName);
-
                 var count = db.QueryValue("SELECT COUNT(*) FROM Users WHERE userName = @0", userName);
 
                 if(count > 0)
                 {
-                    foreach (var x in user)
-                        {
-                              firstName = @x.fName;
-                              lastName = @x.lName;
-                        }
 
                      errorMessage = "Are you sure you want to archive " + userName + "?";
                 }
@@ -39,30 +32,44 @@
                     errorMessage = "Invalid User Name";
                 }
 
+                if(userName=="")
+                {
+                    errorMessage = "Invalid User Name";
+                }
             }
 
             if (Request["submit"] == "Archive")
             {
-                 if ( userName== "" || errorMessage == "Invalid User Name")
+                 userName = Request.Form["searchInput"];
+                 if (errorMessage == "Invalid User Name")
                 {
                     archiveErrorMessage = "You must specify a valid user.";
                 }
 
-
-                // If all information is valid, create a new account
+                // If all information is valid, archive account
                 if (archiveErrorMessage=="")
                 {
-                userName = Request.Form["searchInput"];
+                    
+                    userId = db.QueryValue("SELECT userId FROM Users WHERE userName = @0;", userName);
+                    activeReportsCount = db.QueryValue("SELECT COUNT(*) FROM Reports WHERE userId = @0 AND reportStatus = 'Pending' OR userId = @0 AND reportStatus = 'Investigation'", userId);
 
-                db.Execute("UPDATE Users SET status = 'Archived' WHERE userName = @0;", userName );
+                
+                    if (activeReportsCount == 0)
+                    {
+                        db.Execute("UPDATE Users SET status = 'Archived' WHERE userName = @0;", userName );
 
-                successMessage = "Changes Saved.";
+                        successMessage = "Changes Saved.";
 
-                userName = "";
-                firstName =  "";
-                lastName = "";
+                        userName = "";
+                    }
+                    else
+                    {
+                        archiveErrorMessage = "User must not be part of any Pending/Investigation reports";
+                    }
+
                 }
             }
+            
     }
 
 
@@ -77,7 +84,6 @@
 		<p>@errorMessage</p> 	 
 		 
         <button type="submit" name="submit" value="Archive">Archive</button>
-
         </br></br>
         <p>@archiveErrorMessage</p>
         <p>@successMessage</p>

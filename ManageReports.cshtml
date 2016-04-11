@@ -73,6 +73,8 @@
     long[] reportsId = new long[reportsNumber];
     String[] reportsName = new String[reportsNumber];
     String[] reportsStatus = new String[reportsNumber];
+    String[] reportsUserName = new String[reportsNumber];
+    DateTime[] reportsDate = new DateTime[reportsNumber];
 
     if (IsPost)
     {
@@ -85,24 +87,29 @@
                 IEnumerable<dynamic> reports = null;
                 if(editRep == 1)
                 {
-                    reports = db.Query("SELECT reportName, reportId, reportStatus FROM Reports WHERE incidentId=@0 ", incidentId);
+                    reports = db.Query("SELECT userId, reportPostTime, reportName, reportId, reportStatus FROM Reports WHERE incidentId=@0 ", incidentId);
                     reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0", incidentId);
                 }
                 else
                 {
-                    reports = db.Query("SELECT reportName, reportId, reportStatus FROM Reports WHERE incidentId=@0 AND userId = @1", incidentId, userId);
+                    reports = db.Query("SELECT userId, reportPostTime, reportName, reportId, reportStatus FROM Reports WHERE incidentId=@0 AND userId = @1", incidentId, userId);
                     reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0 AND userId =@1", incidentId, userId);
                 }
 
                 Array.Resize(ref reportsId, reportsNumber);
                 Array.Resize(ref reportsName, reportsNumber);
                 Array.Resize(ref reportsStatus, reportsNumber);
+                Array.Resize(ref reportsUserName, reportsNumber);
+                Array.Resize(ref reportsDate, reportsNumber);
                 var f = 0;
                 foreach (var x in reports)
                 {
                       reportsId[f] = @x.reportId;
                       reportsName[f] = @x.reportName;
                       reportsStatus[f] = @x.reportStatus;
+                      var id = @x.userId;
+                      reportsUserName[f] = db.QueryValue("SELECT userName FROM Users WHERE userId =@0", id);
+                      reportsDate[f] = @x.reportPostTime;
                       f++;
                 }
             }
@@ -113,24 +120,29 @@
                 IEnumerable<dynamic> reports = null;
                 if(editRep == 1)
                 {
-                    reports = db.Query("SELECT reportName, reportId, reportStatus FROM Reports WHERE incidentId=@0 ", archivedIncidentId);
+                    reports = db.Query("SELECT userId, reportPostTime, reportName, reportId, reportStatus FROM Reports WHERE incidentId=@0 ", archivedIncidentId);
                     reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0", archivedIncidentId);
                 }
                 else
                 {
-                    reports = db.Query("SELECT reportName, reportId, reportStatus FROM Reports WHERE incidentId=@0 AND userId = @1", archivedIncidentId, userId);
+                    reports = db.Query("SELECT userId, reportPostTime, reportName, reportId, reportStatus FROM Reports WHERE incidentId=@0 AND userId = @1", archivedIncidentId, userId);
                     reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0 AND userId = @1", archivedIncidentId, userId);   
                 }
 
                 Array.Resize(ref reportsId, reportsNumber);
                 Array.Resize(ref reportsName, reportsNumber);
                 Array.Resize(ref reportsStatus, reportsNumber);
+                Array.Resize(ref reportsUserName, reportsNumber);
+                Array.Resize(ref reportsDate, reportsNumber);
                 var f = 0;
                 foreach (var x in reports)
                 {
                       reportsId[f] = @x.reportId;
                       reportsName[f] = @x.reportName;
                       reportsStatus[f] = @x.reportStatus;
+                      var id = @x.userId;
+                      reportsUserName[f] = db.QueryValue("SELECT userName FROM Users WHERE userId =@0", id);
+                      reportsDate[f] = @x.reportPostTime;
                       f++;
                 }
             }
@@ -195,7 +207,7 @@
     {
        for(int x=0; x<@reportsNumber; x++)
             {
-               @:<li><a href="ViewReport.cshtml?id=@reportsId[x]"><p>@reportsName[x]</p></a><p>Status:  @reportsStatus[x]</p></br></li>
+               @:<li><a href="ViewReport.cshtml?id=@reportsId[x]"><p>@reportsName[x]</p></a><p>Status:  @reportsStatus[x]</p><p>Report submitted by : @reportsUserName[x]  </p><p>  Report posted at: @reportsDate[x]</p></li>
                
                 
             }
