@@ -48,6 +48,8 @@
     <ul>
          @if(WebSecurity.IsAuthenticated)
      {
+         <li><a href="Blank.cshtml">Home</a></li>
+         
         if (editPermissions == 1)
         {
             <li><a href="NewUser.cshtml">Create User</a></li>
@@ -75,7 +77,7 @@
         {
             <li><a href="ManageTemplates.cshtml">Manage Templates</a></li>
             <li><a href="DeleteTemplate.cshtml">Delete Templates</a></li>
-        }
+        }<li><a href="Index.cshtml">Log Out</a></li>
     }
         
         
