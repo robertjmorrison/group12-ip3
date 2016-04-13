@@ -16,13 +16,13 @@
     int incidentsNumber = 0;
     if(editRep == 1)
     {
-        incidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Active' AND incidentOwner = @0 OR status='Active' AND incidentCreator = @0", userId);
-        incidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Active' AND incidentOwner = @0 OR status='Active' AND incidentCreator = @0", userId);
+        incidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Active'");
+        incidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Active'");
     }
     else
     {
-        incidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Active' AND incidentCreator = @0", userId);
-        incidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Active' AND incidentCreator = @0", userId);
+        incidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Active'");
+        incidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Active'");
     }
     
 
@@ -46,13 +46,13 @@
     int archivedIncidentsNumber = 0;
     if(editRep == 1)
     {
-        archivedIncidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Archived' AND incidentOwner = @0 OR status='Archived' AND incidentCreator = @0", userId);
-        archivedIncidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Archived'  AND incidentOwner = @0 OR status='Archived' AND incidentCreator = @0", userId);
+        archivedIncidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Archived'");
+        archivedIncidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Archived'");
     }
     else
     {
-        archivedIncidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Archived' AND incidentCreator = @0", userId);
-        archivedIncidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Archived' AND incidentCreator = @0", userId);
+        archivedIncidents = db.Query("SELECT incidentName, incidentId FROM Incidents WHERE status='Archived'");
+        archivedIncidentsNumber = db.QueryValue("SELECT COUNT(*) FROM Incidents WHERE status='Archived'");
     }
 
 
@@ -87,13 +87,13 @@
                 IEnumerable<dynamic> reports = null;
                 if(editRep == 1)
                 {
-                    reports = db.Query("SELECT userId, reportPostTime, reportName, reportId, reportStatus FROM Reports WHERE incidentId=@0 ", incidentId);
-                    reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0", incidentId);
+                    reports = db.Query("SELECT userId, reportPostTime, reportName, reportId, reportStatus FROM Reports WHERE incidentId= @0 ", incidentId);
+                    reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId= @0", incidentId);
                 }
                 else
                 {
-                    reports = db.Query("SELECT userId, reportPostTime, reportName, reportId, reportStatus FROM Reports WHERE incidentId=@0 AND userId = @1", incidentId, userId);
-                    reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId=@0 AND userId =@1", incidentId, userId);
+                    reports = db.Query("SELECT userId, reportPostTime, reportName, reportId, reportStatus FROM Reports WHERE incidentId= @0 AND userId = @1", incidentId, userId);
+                    reportsNumber = db.QueryValue("SELECT count(*) FROM Reports WHERE incidentId= @0 AND userId = @1", incidentId, userId);
                 }
 
                 Array.Resize(ref reportsId, reportsNumber);
