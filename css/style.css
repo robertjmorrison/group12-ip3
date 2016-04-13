@@ -6,8 +6,24 @@
     max-width: 100%;
 }
 
+.page-wrapper {
+    min-height: 100%;
+height: auto !important;
+height: 100%;
+margin: 0 auto -2em;
+padding-bottom: 30px;
+}
+
 .col-sm-10 {
     padding: 20px;
+}
+
+.footer, .push {
+height: 2em;
+}
+
+html, body {
+height: 100%;
 }
 
 #login {
