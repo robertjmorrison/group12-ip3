@@ -63,9 +63,25 @@
     var j = 0;
     foreach (var x in archivedIncidents)
     {
-          archivedIncidentsId[j] = @x.incidentId;
-          archivedIncidentsName[j] = @x.incidentName;
-          j++;
+          if(editRep == 0)
+          {
+              var incidentCheckCount = db.QueryValue("SELECT COUNT(*) FROM Reports WHERE userId = @0 AND incidentId = @1", userId, x.incidentId);
+
+              if(incidentCheckCount > 0)
+              {
+                archivedIncidentsId[j] = @x.incidentId;
+                archivedIncidentsName[j] = @x.incidentName;
+                j++; 
+              }
+
+          }
+          else
+          {
+            archivedIncidentsId[j] = @x.incidentId;
+            archivedIncidentsName[j] = @x.incidentName;
+            j++; 
+          }
+
     }
 
    
