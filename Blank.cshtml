@@ -26,8 +26,8 @@
     }
     else
     {
-        reports = db.Query("SELECT reportName, reportId, incidentId FROM Reports WHERE reportPostTime > @0 AND incidentCreator = @1",lastLogin, userId);
-        reportsNumber = db.QueryValue("SELECT COUNT(*) FROM Reports WHERE reportPostTime > @0 AND incidentCreator = @1",lastLogin, userId);
+        reports = db.Query("SELECT reportName, reportId, incidentId FROM Reports WHERE reportPostTime > @0 AND incidentId IN (SELECT incidentId FROM Incidents WHERE incidentCreator = @1)",lastLogin, userId);
+        reportsNumber = db.QueryValue("SELECT COUNT(*) FROM Reports WHERE reportPostTime > @0 AND incidentId IN (SELECT incidentId FROM Incidents WHERE incidentCreator = @1)",lastLogin, userId);
     }
     
 
