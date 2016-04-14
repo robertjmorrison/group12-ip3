@@ -99,14 +99,15 @@
 <div>  
     <h2>Edit Role</h2>
               
-    <form id='loginform' method="post" class="login">
+    <form id='edit_role' method="post" class="login">
         <p class="title"> Select the role you wish to edit</p>
         <select name="role">
+        <option value="" disabled selected>Please select a role</option>
         @for(int x=0; x<rolesNumber; x++)
         {
             if (@rolesId[x] == @roleId)
             {
-                <option selected value=@rolesId[x] >@rolesName[x]</option>
+                <option value=@rolesId[x] >@rolesName[x]</option>
             }   
             else
             {
@@ -121,96 +122,96 @@
 
         @if (@editPermissions == 1)
           {
-                @:<input type="checkbox" name="Edit permissions" value="1" checked >Edit permissions</br>
+                @:<label><input type="checkbox" name="Edit permissions" value="1" checked >Edit permissions</label></br>
           }
           else
           {
-                @:<input type="checkbox" name="Edit permissions" value="1" >Edit permissions</br>        
+                @:<label><input type="checkbox" name="Edit permissions" value="1" >Edit permissions</label></br>        
           }
 
         @if (@createTemplate == 1)
           {
-                @:<input type="checkbox" name="Create templates" value="1" checked >Create templates</br>
+                @:<label><input type="checkbox" name="Create templates" value="1" checked >Create templates</label></br>
           }
           else
           {
-                @:<input type="checkbox" name="Create templates" value="1">Create templates</br>
+                @:<label><input type="checkbox" name="Create templates" value="1">Create templates</label></br>
           }
 
         @if (@editTemplate == 1)
           {
-                @:<input type="checkbox" name="Edit templates" value="1" checked >Edit templates</br>
+                @:<label><input type="checkbox" name="Edit templates" value="1" checked >Edit templates</label></br>
           }
           else
           {
-                @:<input type="checkbox" name="Edit templates" value="1" >Edit templates</br>
+                @:<label><input type="checkbox" name="Edit templates" value="1" >Edit templates</label></br>
           }
 
         @if (@closeReport == 1)
           {
-                @:<input type="checkbox" name="Close reports" value="1" checked >Close reports</br>
+                @:<label><input type="checkbox" name="Close reports" value="1" checked >Close reports</label></br>
           }
           else
           {
-                @:<input type="checkbox" name="Close reports" value="1" >Close reports</br>
+                @:<label><input type="checkbox" name="Close reports" value="1" >Close reports</label></br>
           }
 
         @if (@changeReportStatus == 1)
           {
-                @:<input type="checkbox" name="Change report status" value="1" checked >Change report status</br>
+                @:<label><input type="checkbox" name="Change report status" value="1" checked >Change report status</label></br>
           }
           else
           {
-                @:<input type="checkbox" name="Change report status" value="1">Change report status</br>
+                @:<label><input type="checkbox" name="Change report status" value="1">Change report status</label></br>
           }
 
         @if (@reopenReport == 1)
           {
-                @:<input type="checkbox" name="Reopen report" value="1" checked >Reopen report</br>
+                @:<label><input type="checkbox" name="Reopen report" value="1" checked >Reopen report</label></br>
           }
           else
           {
-                @:<input type="checkbox" name="Reopen report" value="1" >Reopen report</br>        
+                @:<label><input type="checkbox" name="Reopen report" value="1" >Reopen report</label></br>        
           }
 
         @if (@createReport == 1)
           {
-                @:<input type="checkbox" name="Create report" value="1" checked >Create report</br>
+                @:<label><input type="checkbox" name="Create report" value="1" checked >Create report</label></br>
           }
           else
           {
-                @:<input type="checkbox" name="Create report" value="1">Create report</br>
+                @:<label><input type="checkbox" name="Create report" value="1">Create report</label></br>
           }
 
         @if (@editReport == 1)
           {
-                @:<input type="checkbox" name="Edit report" value="1" checked >Edit report</br>
+                @:<label><input type="checkbox" name="Edit report" value="1" checked >Edit report</label></br>
           }
           else
           {
-                @:<input type="checkbox" name="Edit report" value="1" >Edit report</br>
+                @:<label><input type="checkbox" name="Edit report" value="1" >Edit report</label></br>
           }
 
         @if (@addAttachment == 1)
           {
-                @:<input type="checkbox" name="Add attachment" value="1" checked >Add attachment</br>
+                @:<label><input type="checkbox" name="Add attachment" value="1" checked >Add attachment</label></br>
           }
           else
           {
-                @:<input type="checkbox" name="Add attachment" value="1" >Add attachment</br>
+                @:<label><input type="checkbox" name="Add attachment" value="1" >Add attachment</label></br>
           }
 
         @if (@removeAttachment == 1)
           {
-                @:<input type="checkbox" name="Remove attachment" value="1" checked >Remove attachment</br>
+                @:<label><input type="checkbox" name="Remove attachment" value="1" checked >Remove attachment</label></br>
           }
           else
           {
-                @:<input type="checkbox" name="Remove attachment" value="1">Remove attachment</br>
+                @:<label><input type="checkbox" name="Remove attachment" value="1">Remove attachment</label></br>
           }
 
         </br></br>	 		 
-        <button type="submit" name="submit" value="Edit Role">Edit Role</button>
+        <button type="submit" name="submit" value="Edit Role">Edit Role</label></button>
         <p>@errorMessage</p>
         </br>
     </form>

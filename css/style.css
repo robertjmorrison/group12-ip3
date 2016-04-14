@@ -205,9 +205,27 @@ div {
 }
 
 input[type=checkbox] {
-    display: inline !important;
-    width: auto !important;
+   width: 13px !important;
+    height: 13px;
+    padding: 0px;
+    margin-right:4px;
+    vertical-align: bottom;
+    position: relative;
+    *overflow: hidden;
+    float: left;
+    text-align: left;
+
     
+}
+
+#register_role, #edit_role {
+     text-align: left !important;
+}
+
+.login select {
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 input[type=radio] {
