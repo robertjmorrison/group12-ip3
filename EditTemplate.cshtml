@@ -5,9 +5,9 @@
      }
     var db = Database.Open("ProjectManager");
 
-    //Request["id"];
+    
 
-    var templateId = 2;
+    var templateId = Request["id"];;
     var errorMessage = "";
     var templateName = db.QueryValue("SELECT templateName FROM Templates WHERE templateId = @0", templateId);
     var templateObj = db.QueryValue("SELECT templateObj FROM Templates WHERE templateId = @0", templateId);
