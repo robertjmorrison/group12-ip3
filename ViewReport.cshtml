@@ -84,26 +84,26 @@
 
     @if(statusRep == 1)
     {
-           @:</br><input type="submit" name="submit" value="Request Additional Information"> 
+           @:<input type="submit" name="submit" value="Request Additional Info"> 
     }
 
     @if(statusRep == 1 && reportStatus == "Pending" || statusRep == 1 && reportStatus == "Investigation")
     {
-           @:</br><input type="submit" name="submit" value="Sign off"> 
+           @:<input type="submit" name="submit" value="Sign off"> 
     }
     @if(deleteRep == 1)
     {
-           @:</br><input type="submit" name="submit" value="Delete Report"> 
+           @:<input type="submit" name="submit" value="Delete Report"> 
             if(deleteConfirm ==1)
             {
-               @:</br><p>Are you sure you wish to permenantly delete this report?</p> 
-               @:</br><input type="submit" name="submit" value="Confirm Deletion">  
+               @:<p>Are you sure you wish to permenantly delete this report?</p> 
+               @:<input type="submit" name="submit" value="Confirm Deletion">  
             }
 
     }
     @if(statusRep == 1 && reportStatus == "Pending")
     {
-           @:</br><input type="submit" name="submit" value="Register investigation"> 
+           @:<input type="submit" name="submit" value="Register investigation"> 
     }
     <p>@successMessage</p>
 </form>
