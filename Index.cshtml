@@ -14,7 +14,7 @@ if(IsPost)
             userNameLogIn = Request.Form["username"];
             passwordLogIn = Request.Form["password"];
 
-             if (WebSecurity.UserExists(userNameLogIn))
+             if (WebSecurity.UserExists(userNameLogIn) & passwordLogIn != "")
                 {
 
                     isLogged = WebSecurity.Login(userNameLogIn, passwordLogIn, false);
